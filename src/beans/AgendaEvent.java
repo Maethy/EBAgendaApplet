@@ -4,6 +4,7 @@
  */
 package beans;
 
+import java.awt.Container;
 import java.util.Calendar;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -21,9 +22,17 @@ public class AgendaEvent extends JPanel{
     
     private boolean isWholeDayEvent;
 
-    public AgendaEvent(String summary) {
-        this.summary = summary;
+    public AgendaEvent(){
+        this.summary = "dummy";
         title = new JLabel(summary);
+        add(title);
+    }
+    
+    public AgendaEvent(AgendaDay parent, String summary) {
+        this.summary = summary;
+        this.parentDay = parent;
+        title = new JLabel(summary);
+        setBackground(parentDay.getBackground());
         add(title);
     }
 

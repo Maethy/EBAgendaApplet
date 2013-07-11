@@ -4,10 +4,18 @@
  */
 package beans;
 
+import javax.swing.JLabel;
+
 /**
  *
  * @author jsmaya
  */
-public class AgendaUser {
+public class AgendaUser extends JLabel {
+    private String name;
+
+    public AgendaUser(String name) {
+        this.name = name;
+        setText(name);
+    }
     
 }

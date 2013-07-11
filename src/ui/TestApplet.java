@@ -24,20 +24,30 @@ public class TestApplet extends javax.swing.JApplet {
      */
     @Override
     public void init() {
-        this.setSize(640, 480);
+        this.setSize(java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment().
+                getMaximumWindowBounds().width-16, java.awt.GraphicsEnvironment.
+                        getLocalGraphicsEnvironment().getMaximumWindowBounds().
+                        height-64);
         jcalendar = new JCalendar();
+//        Calendar test = Calendar.getInstance();
+//        test.set(2012, 12, 25);
+//        for(int i =0; i<1000; i++){
+//            test.add(Calendar.DAY_OF_MONTH, 1);
+//            System.out.println(test.get(Calendar.DAY_OF_YEAR));
+//        }
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+        javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(TestApplet.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
@@ -64,13 +74,17 @@ public class TestApplet extends javax.swing.JApplet {
 
     private void initAgenda(){
 //        if(agenda!=null)this.contentPanel.remove(agenda);
+        Calendar startTimeElapsed = Calendar.getInstance();
         if(startCalendar == null){
             startCalendar = Calendar.getInstance();
         }
         agenda = new AgendaPanel(startCalendar, endCalendar);
         contentScrollPane.setViewportView(agenda);
-        System.out.println(startCalendar.get(Calendar.WEEK_OF_YEAR));
+//        System.out.println(startCalendar.get(Calendar.WEEK_OF_YEAR));
         this.revalidate();
+        Calendar timeElapsed = Calendar.getInstance();
+        long millisec =  timeElapsed.getTimeInMillis()-startTimeElapsed.getTimeInMillis();
+        jLabel1.setText("Eurobrevets "+millisec);
     }
     /**
      * This method is called from within the init() method to initialize the
@@ -91,6 +105,8 @@ public class TestApplet extends javax.swing.JApplet {
         labelEndDate = new javax.swing.JTextField();
         btJCalStart = new javax.swing.JButton();
         btJCalEnd = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        agendaPanel1 = new beans.AgendaPanel();
         contentPanel = new javax.swing.JPanel();
         contentScrollPane = new javax.swing.JScrollPane();
 
@@ -121,24 +137,28 @@ public class TestApplet extends javax.swing.JApplet {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.weightx = 1.0;
         topPanel.add(jLabel2, gridBagConstraints);
 
         labelStartDate.setColumns(8);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.weightx = 1.0;
         topPanel.add(labelStartDate, gridBagConstraints);
 
         jLabel3.setText("endDate");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.weightx = 1.0;
         topPanel.add(jLabel3, gridBagConstraints);
 
         labelEndDate.setColumns(8);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.weightx = 1.0;
         topPanel.add(labelEndDate, gridBagConstraints);
 
         btJCalStart.setText("jCal");
@@ -161,13 +181,24 @@ public class TestApplet extends javax.swing.JApplet {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.weightx = 1.0;
         topPanel.add(btJCalEnd, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         getContentPane().add(topPanel, gridBagConstraints);
+
+        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.LINE_AXIS));
+        jPanel1.add(agendaPanel1);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        getContentPane().add(jPanel1, gridBagConstraints);
 
         contentPanel.setLayout(new java.awt.GridLayout(1, 7));
         contentPanel.add(contentScrollPane);
@@ -212,6 +243,7 @@ public class TestApplet extends javax.swing.JApplet {
     }//GEN-LAST:event_btJCalEndActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private beans.AgendaPanel agendaPanel1;
     private javax.swing.JButton btJCalEnd;
     private javax.swing.JButton btJCalStart;
     private javax.swing.JPanel contentPanel;
@@ -220,6 +252,7 @@ public class TestApplet extends javax.swing.JApplet {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField labelEndDate;
     private javax.swing.JTextField labelStartDate;
     private javax.swing.JPanel topPanel;
