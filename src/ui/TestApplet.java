@@ -8,7 +8,6 @@ import beans.AgendaPanel;
 import com.toedter.calendar.JCalendar;
 import java.util.Calendar;
 import javax.swing.JOptionPane;
-import javax.swing.JViewport;
 
 /**
  *
@@ -28,7 +27,6 @@ public class TestApplet extends javax.swing.JApplet {
                 getMaximumWindowBounds().width-16, java.awt.GraphicsEnvironment.
                         getLocalGraphicsEnvironment().getMaximumWindowBounds().
                         height-64);
-        jcalendar = new JCalendar();
 //        Calendar test = Calendar.getInstance();
 //        test.set(2012, 12, 25);
 //        for(int i =0; i<1000; i++){
@@ -75,8 +73,13 @@ public class TestApplet extends javax.swing.JApplet {
     private void initAgenda(){
 //        if(agenda!=null)this.contentPanel.remove(agenda);
         Calendar startTimeElapsed = Calendar.getInstance();
+        startCalendar = startDateChooser.getCalendar();
+        endCalendar = endDateChooser.getCalendar();
         if(startCalendar == null){
             startCalendar = Calendar.getInstance();
+        }
+        if(endCalendar == null){
+            endCalendar = Calendar.getInstance();
         }
         agenda = new AgendaPanel(startCalendar, endCalendar);
         contentScrollPane.setViewportView(agenda);
@@ -84,7 +87,7 @@ public class TestApplet extends javax.swing.JApplet {
         this.revalidate();
         Calendar timeElapsed = Calendar.getInstance();
         long millisec =  timeElapsed.getTimeInMillis()-startTimeElapsed.getTimeInMillis();
-        jLabel1.setText("Eurobrevets "+millisec);
+        lbTitle.setText("Eurobrevets "+millisec);
     }
     /**
      * This method is called from within the init() method to initialize the
@@ -96,93 +99,84 @@ public class TestApplet extends javax.swing.JApplet {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        topPanel = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
         labelStartDate = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        labelEndDate = new javax.swing.JTextField();
         btJCalStart = new javax.swing.JButton();
+        labelEndDate = new javax.swing.JTextField();
         btJCalEnd = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
-        agendaPanel1 = new beans.AgendaPanel();
+        topPanel = new javax.swing.JPanel();
+        lbTitle = new javax.swing.JLabel();
+        btBuild = new javax.swing.JButton();
+        datePanel = new javax.swing.JPanel();
+        startDatePanel = new javax.swing.JPanel();
+        lbStartDate = new javax.swing.JLabel();
+        startDateChooser = new com.toedter.calendar.JDateChooser();
+        endDatePanel = new javax.swing.JPanel();
+        lbEndDate = new javax.swing.JLabel();
+        endDateChooser = new com.toedter.calendar.JDateChooser();
         contentPanel = new javax.swing.JPanel();
         contentScrollPane = new javax.swing.JScrollPane();
 
-        getContentPane().setLayout(new java.awt.GridBagLayout());
-
-        topPanel.setLayout(new java.awt.GridBagLayout());
-
-        jLabel1.setText("Eurobrevets");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        topPanel.add(jLabel1, gridBagConstraints);
-
-        jButton2.setText("Build");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 4;
-        gridBagConstraints.weightx = 1.0;
-        topPanel.add(jButton2, gridBagConstraints);
-
-        jLabel2.setText("startDate");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.weightx = 1.0;
-        topPanel.add(jLabel2, gridBagConstraints);
-
         labelStartDate.setColumns(8);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.weightx = 1.0;
-        topPanel.add(labelStartDate, gridBagConstraints);
 
-        jLabel3.setText("endDate");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.weightx = 1.0;
-        topPanel.add(jLabel3, gridBagConstraints);
-
-        labelEndDate.setColumns(8);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.weightx = 1.0;
-        topPanel.add(labelEndDate, gridBagConstraints);
-
-        btJCalStart.setText("jCal");
+        btJCalStart.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/toedter/calendar/images/JCalendarColor16.gif"))); // NOI18N
+        btJCalStart.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btJCalStart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btJCalStartActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        topPanel.add(btJCalStart, gridBagConstraints);
 
-        btJCalEnd.setText("jCal");
+        labelEndDate.setColumns(8);
+
+        btJCalEnd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/toedter/calendar/images/JCalendarColor16.gif"))); // NOI18N
+        btJCalEnd.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btJCalEnd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btJCalEndActionPerformed(evt);
             }
         });
+
+        getContentPane().setLayout(new java.awt.GridBagLayout());
+
+        topPanel.setLayout(new java.awt.GridBagLayout());
+
+        lbTitle.setText("Eurobrevets");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        topPanel.add(lbTitle, gridBagConstraints);
+
+        btBuild.setText("Build");
+        btBuild.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btBuildActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.weightx = 1.0;
-        topPanel.add(btJCalEnd, gridBagConstraints);
+        topPanel.add(btBuild, gridBagConstraints);
+
+        datePanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        lbStartDate.setText("startDate");
+        startDatePanel.add(lbStartDate);
+        startDatePanel.add(startDateChooser);
+
+        datePanel.add(startDatePanel);
+
+        lbEndDate.setText("endDate");
+        endDatePanel.add(lbEndDate);
+        endDatePanel.add(endDateChooser);
+
+        datePanel.add(endDatePanel);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.weightx = 1.0;
+        topPanel.add(datePanel, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -190,15 +184,6 @@ public class TestApplet extends javax.swing.JApplet {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         getContentPane().add(topPanel, gridBagConstraints);
-
-        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel1.add(agendaPanel1);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        getContentPane().add(jPanel1, gridBagConstraints);
 
         contentPanel.setLayout(new java.awt.GridLayout(1, 7));
         contentPanel.add(contentScrollPane);
@@ -214,47 +199,52 @@ public class TestApplet extends javax.swing.JApplet {
 
     
     
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btBuildActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBuildActionPerformed
         initAgenda();
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void btJCalStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btJCalStartActionPerformed
-        if(JOptionPane.showOptionDialog(this, jcalendar, "Select a date", 
-                JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
-                null, null, null) == 0){    
-            labelStartDate.setText(jcalendar.getCalendar()
-                    .get(Calendar.DAY_OF_MONTH)+"-"+(jcalendar.getCalendar()
-                    .get(Calendar.MONTH)+1)+"-"+jcalendar.getCalendar()
-                    .get(Calendar.YEAR));
-            startCalendar = jcalendar.getCalendar();
-        }
-    }//GEN-LAST:event_btJCalStartActionPerformed
+    }//GEN-LAST:event_btBuildActionPerformed
 
     private void btJCalEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btJCalEndActionPerformed
-        if(JOptionPane.showOptionDialog(this, jcalendar, "Select a date", 
-                JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
-                null, null, null) == 0){    
-            labelEndDate.setText(jcalendar.getCalendar()
-                    .get(Calendar.DAY_OF_MONTH)+"-"+(jcalendar.getCalendar()
-                    .get(Calendar.MONTH)+1)+"-"+jcalendar.getCalendar()
-                    .get(Calendar.YEAR));
-            endCalendar = jcalendar.getCalendar();
+        jcalendar = new JCalendar();
+        if(JOptionPane.showOptionDialog(btJCalEnd, jcalendar, "Select a date",
+            JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+            null, null, null) == 0){
+        labelEndDate.setText(jcalendar.getCalendar()
+            .get(Calendar.DAY_OF_MONTH)+"-"+(jcalendar.getCalendar()
+                .get(Calendar.MONTH)+1)+"-"+jcalendar.getCalendar()
+            .get(Calendar.YEAR));
+        endCalendar = jcalendar.getCalendar();
         }
     }//GEN-LAST:event_btJCalEndActionPerformed
 
+    private void btJCalStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btJCalStartActionPerformed
+        jcalendar = new JCalendar();
+        if(JOptionPane.showOptionDialog(btJCalStart, jcalendar, "Select a date",
+            JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+            null, null, null) == 0){
+        labelStartDate.setText(jcalendar.getCalendar()
+            .get(Calendar.DAY_OF_MONTH)+"-"+(jcalendar.getCalendar()
+                .get(Calendar.MONTH)+1)+"-"+jcalendar.getCalendar()
+            .get(Calendar.YEAR));
+        startCalendar = jcalendar.getCalendar();
+        }
+    }//GEN-LAST:event_btJCalStartActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private beans.AgendaPanel agendaPanel1;
+    private javax.swing.JButton btBuild;
     private javax.swing.JButton btJCalEnd;
     private javax.swing.JButton btJCalStart;
     private javax.swing.JPanel contentPanel;
     private javax.swing.JScrollPane contentScrollPane;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel datePanel;
+    private com.toedter.calendar.JDateChooser endDateChooser;
+    private javax.swing.JPanel endDatePanel;
     private javax.swing.JTextField labelEndDate;
     private javax.swing.JTextField labelStartDate;
+    private javax.swing.JLabel lbEndDate;
+    private javax.swing.JLabel lbStartDate;
+    private javax.swing.JLabel lbTitle;
+    private com.toedter.calendar.JDateChooser startDateChooser;
+    private javax.swing.JPanel startDatePanel;
     private javax.swing.JPanel topPanel;
     // End of variables declaration//GEN-END:variables
 }

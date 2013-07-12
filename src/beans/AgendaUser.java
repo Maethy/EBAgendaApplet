@@ -18,4 +18,9 @@ public class AgendaUser extends JLabel {
         setText(name);
     }
     
+    
+    public String getUserName(){
+        return this.name;
+    }
+    
 }

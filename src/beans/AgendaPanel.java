@@ -79,7 +79,7 @@ public class AgendaPanel extends JPanel {
 //        currentDay--;
         startCalendar.add(Calendar.DAY_OF_YEAR, -currentDay);
         for(int i=0; i<nbWeeks;i++){
-            add(new AgendaWeek(startCalendar));
+            add(new AgendaWeek(this, startCalendar));
             startCalendar.add(Calendar.WEEK_OF_YEAR, 1);
             add(new JSeparator());           
             add(new JSeparator());
@@ -88,5 +88,6 @@ public class AgendaPanel extends JPanel {
 //        setLayout(new GridLayout(0,1));
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.PAGE_AXIS));
     }
+    
 }
         

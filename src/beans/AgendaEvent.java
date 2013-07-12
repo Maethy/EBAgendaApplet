@@ -4,10 +4,12 @@
  */
 package beans;
 
-import java.awt.Container;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragSource;
 import java.util.Calendar;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.xml.bind.Marshaller.Listener;
 
 /**
  *
@@ -19,6 +21,7 @@ public class AgendaEvent extends JPanel{
     private String summary;
     private String description;
     private JLabel title;
+    private int id;
     
     private boolean isWholeDayEvent;
 
@@ -31,9 +34,55 @@ public class AgendaEvent extends JPanel{
     public AgendaEvent(AgendaDay parent, String summary) {
         this.summary = summary;
         this.parentDay = parent;
-        title = new JLabel(summary);
+        this.dateOfEvent = parent.getDateOfDay();
+        id = this.hashCode();
+        System.out.println("hash from parentday "+this.parentDay.hashCode()+" / "+parent.hashCode());
+        title = new JLabel(this.summary+" "+this.hashCode()+" "+this.parentDay.hashCode());
         setBackground(parentDay.getBackground());
         add(title);
+        
+        DragSource ds = new DragSource();
+//        this.setTransferHandler(new AgendaEventTransferHandler());
+        ds.createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_MOVE, new DragGestureListImp());
+        
+//        this.addMouseListener(new MouseAdapter(){
+          
+//      public void mousePressed(MouseEvent e){
+//        AgendaEvent ae = (AgendaEvent)e.getSource();
+//        TransferHandler handle = ae.getTransferHandler();
+//        handle.exportAsDrag(ae, e, TransferHandler.COPY);
+//      }
+//    });
+    }
+    
+    public AgendaEvent(AgendaEvent a){
+        this.dateOfEvent = Calendar.getInstance();
+        this.dateOfEvent.setTimeInMillis(a.dateOfEvent.getTimeInMillis());
+        
+        if(a.description !=null){
+            this.description = String.copyValueOf(a.description.toCharArray());
+        }
+        
+        this.id = a.id;
+        
+        this.isWholeDayEvent = a.isWholeDayEvent;
+        this.parentDay = a.parentDay;
+        this.summary = String.copyValueOf(a.summary.toCharArray());
+        this.title = new JLabel(a.title.getText());
+
+        
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public AgendaDay getParentDay() {
+        return parentDay;
+    }
+
+    public void setParentDay(AgendaDay parentDay) {
+        this.parentDay = parentDay;
     }
 
     
