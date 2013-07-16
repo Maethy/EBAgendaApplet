@@ -22,7 +22,6 @@ public class AgendaPanel extends JPanel {
     private JCalendar jcalendar;
     private Calendar startCalendar;
     private Calendar endCalendar;
-    private JPanel header;
     
     
     public AgendaPanel(){
@@ -42,16 +41,9 @@ public class AgendaPanel extends JPanel {
 
     private void initComponents(){
         title = new JLabel("EuroBrevets Agenda");  
-        header = new JPanel();
+       
         add(title);
         add(new JSeparator());
-        add(header);
-        header.setLayout(new GridLayout(1,8));
-        header.add(new javax.swing.JLabel("User"));
-        for(int i=0; i<7; i++){
-            header.add(new javax.swing.JLabel(commons.Constants.DAY_OF_WEEK[i]));
-        }
-        add(header);
         int nbWeeks = 4;
         int nbYears = 1;
         if(endCalendar != null){

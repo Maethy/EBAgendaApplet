@@ -9,6 +9,9 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  *
@@ -20,6 +23,7 @@ public class AgendaWeek extends javax.swing.JPanel {
     private List <AgendaUser> userList;
     private GridBagConstraints gridBagConstraints;
     private AgendaPanel parentAgenda;
+    private JPanel header;
     
     
     public AgendaWeek(){
@@ -67,25 +71,40 @@ public class AgendaWeek extends javax.swing.JPanel {
         this.startOfWeek = startOfWeek;
         userList = new ArrayList<AgendaUser>();
         userList.add(new AgendaUser("Alain"));userList.add(new AgendaUser("Nico"));
-        setLayout(new GridLayout(userList.size(), 8));
+        setLayout(new GridLayout(userList.size()+1, 8));
 //        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
         dateOfDay = Calendar.getInstance();
         dateOfDay.setTimeInMillis(startOfWeek.getTimeInMillis());
-//        
+//      
+        JPanel userHeaderPanel = new JPanel();
+        JLabel userHeader = new JLabel("User");
+        userHeader.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        userHeaderPanel.add(userHeader);
+        add(userHeaderPanel);
+        for(int i=0; i<7; i++){
+            String date = "<html><body><center>"
+                    +commons.Constants.DAY_OF_WEEK[i]+"<br>"
+                    +dateOfDay.get(Calendar.DAY_OF_MONTH)+"-"+dateOfDay.
+                    get(Calendar.MONTH+1)+"-"+dateOfDay.get(Calendar.YEAR)
+                    +" numWeek "+dateOfDay.getMinimalDaysInFirstWeek()+"</center></body></html>";
+            JPanel dayHeaderPanel = new JPanel();
+            JLabel dayHeader = new javax.swing.JLabel(date);
+            dayHeaderPanel.setLayout
+                    (new BoxLayout(dayHeaderPanel, BoxLayout.PAGE_AXIS));
+            dayHeaderPanel.add(dayHeader);
+            dayHeader.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+            add(dayHeaderPanel);
+            dateOfDay.add(Calendar.DAY_OF_YEAR, 1);
+        }
+        dateOfDay.setTimeInMillis(startOfWeek.getTimeInMillis());
         for(int j=0; j<userList.size(); j++){
             gridBagConstraints = new java.awt.GridBagConstraints();
             gridBagConstraints.gridx = 0;
-//            gridBagConstraints.gridy = 0;
-//            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-//            gridBagConstraints.weightx = 1.0;
-//            gridBagConstraints.weighty = 1.0;
             add(userList.get(j));
             for(int i=0; i<7; i++){
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1+i;
-//                gridBagConstraints.gridy = 1;
-//                gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
                 gridBagConstraints.weightx = 0.0;
                 gridBagConstraints.weighty = 0.0;
                 

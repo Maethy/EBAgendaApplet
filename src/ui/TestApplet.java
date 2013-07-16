@@ -107,12 +107,20 @@ public class TestApplet extends javax.swing.JApplet {
         lbTitle = new javax.swing.JLabel();
         btBuild = new javax.swing.JButton();
         datePanel = new javax.swing.JPanel();
+        dateBtPanel = new javax.swing.JPanel();
+        todayButton = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         startDatePanel = new javax.swing.JPanel();
         lbStartDate = new javax.swing.JLabel();
         startDateChooser = new com.toedter.calendar.JDateChooser();
         endDatePanel = new javax.swing.JPanel();
         lbEndDate = new javax.swing.JLabel();
         endDateChooser = new com.toedter.calendar.JDateChooser();
+        employeePanel = new javax.swing.JPanel();
+        employeeBtPanel = new javax.swing.JPanel();
+        btAllEmployee = new javax.swing.JButton();
+        btNoneEmployee = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         contentPanel = new javax.swing.JPanel();
         contentScrollPane = new javax.swing.JScrollPane();
 
@@ -140,7 +148,7 @@ public class TestApplet extends javax.swing.JApplet {
 
         topPanel.setLayout(new java.awt.GridBagLayout());
 
-        lbTitle.setText("Eurobrevets");
+        lbTitle.setText("Date Selection");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -161,13 +169,21 @@ public class TestApplet extends javax.swing.JApplet {
 
         datePanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        lbStartDate.setText("startDate");
+        todayButton.setText("Current Week");
+        dateBtPanel.add(todayButton);
+
+        jButton1.setText("Reset");
+        dateBtPanel.add(jButton1);
+
+        datePanel.add(dateBtPanel);
+
+        lbStartDate.setText("from");
         startDatePanel.add(lbStartDate);
         startDatePanel.add(startDateChooser);
 
         datePanel.add(startDatePanel);
 
-        lbEndDate.setText("endDate");
+        lbEndDate.setText("to");
         endDatePanel.add(lbEndDate);
         endDatePanel.add(endDateChooser);
 
@@ -177,6 +193,24 @@ public class TestApplet extends javax.swing.JApplet {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.weightx = 1.0;
         topPanel.add(datePanel, gridBagConstraints);
+
+        employeePanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        btAllEmployee.setText("All");
+        employeeBtPanel.add(btAllEmployee);
+
+        btNoneEmployee.setText("None");
+        employeeBtPanel.add(btNoneEmployee);
+
+        employeePanel.add(employeeBtPanel);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.weightx = 1.0;
+        topPanel.add(employeePanel, gridBagConstraints);
+
+        jLabel1.setText("Agenda Selection");
+        topPanel.add(jLabel1, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -230,14 +264,21 @@ public class TestApplet extends javax.swing.JApplet {
     }//GEN-LAST:event_btJCalStartActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btAllEmployee;
     private javax.swing.JButton btBuild;
     private javax.swing.JButton btJCalEnd;
     private javax.swing.JButton btJCalStart;
+    private javax.swing.JButton btNoneEmployee;
     private javax.swing.JPanel contentPanel;
     private javax.swing.JScrollPane contentScrollPane;
+    private javax.swing.JPanel dateBtPanel;
     private javax.swing.JPanel datePanel;
+    private javax.swing.JPanel employeeBtPanel;
+    private javax.swing.JPanel employeePanel;
     private com.toedter.calendar.JDateChooser endDateChooser;
     private javax.swing.JPanel endDatePanel;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField labelEndDate;
     private javax.swing.JTextField labelStartDate;
     private javax.swing.JLabel lbEndDate;
@@ -245,6 +286,7 @@ public class TestApplet extends javax.swing.JApplet {
     private javax.swing.JLabel lbTitle;
     private com.toedter.calendar.JDateChooser startDateChooser;
     private javax.swing.JPanel startDatePanel;
+    private javax.swing.JButton todayButton;
     private javax.swing.JPanel topPanel;
     // End of variables declaration//GEN-END:variables
 }

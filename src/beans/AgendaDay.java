@@ -16,6 +16,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import javax.swing.JButton;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -169,7 +170,7 @@ public class AgendaDay extends javax.swing.JPanel {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                displayEvents();
+                showMore();
             }
             
             
@@ -186,28 +187,28 @@ public class AgendaDay extends javax.swing.JPanel {
             }
             
         });
-
-        btnb = new JButton("nb");
-        btnb.setMargin(new java.awt.Insets(1, 13, 1, 13));
-        btnb.setContentAreaFilled(false);
-        btnb.setBackground(getBackground());
-        btnb.addActionListener(new ActionListener(){
-            ListSurvey ls = new ListSurvey(AgendaDay.this);
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                ls.start();
-            }
-            
-        });
+//
+//        btnb = new JButton("nb");
+//        btnb.setMargin(new java.awt.Insets(1, 13, 1, 13));
+//        btnb.setContentAreaFilled(false);
+//        btnb.setBackground(getBackground());
+//        btnb.addActionListener(new ActionListener(){
+//            ListSurvey ls = new ListSurvey(AgendaDay.this);
+//            @Override
+//            public void actionPerformed(ActionEvent ae) {
+//                ls.start();
+//            }
+//            
+//        });
         contentPane.setBackground(getBackground());
         dayNumber = new javax.swing.JLabel
                 (""+dateOfDay.get(Calendar.DAY_OF_MONTH)+" "+dateOfDay.
-                getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.FRENCH)
-                +" "+dateOfDay.get(Calendar.YEAR)+" "+this.hashCode());
+                getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.FRENCH));
+//                +" "+dateOfDay.get(Calendar.YEAR)+" "+this.hashCode());
         add(dayNumber, BorderLayout.PAGE_START);
         add(contentPane, BorderLayout.CENTER);
-        add(btMore, BorderLayout.WEST);
-        add(btnb, BorderLayout.EAST);
+//        add(btMore, BorderLayout.WEST);
+//        add(btnb, BorderLayout.EAST);
         add(btAddEvent, BorderLayout.PAGE_END);
 //        displayEvents();
     }
@@ -224,12 +225,21 @@ public class AgendaDay extends javax.swing.JPanel {
         return btMore;
     }
 
-    
+    private void showMore(){
+        JList jListEvent = new JList();
+        for(AgendaEvent e : eventList){
+            jListEvent.add(e);
+        }
+        JOptionPane.showOptionDialog(this, jListEvent, "",
+                JOptionPane.CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                null, eventList.toArray(), null);
+    }
     
     
     private void addEvent(){
-        JOptionPane.showInputDialog(this.btAddEvent, new AgendaNewEvent(parentWeek.getUserList()));
-        
+//        JOptionPane.showInputDialog(this.btAddEvent, new AgendaNewEvent(parentWeek.getUserList()));
+        JOptionPane.showOptionDialog(this.btAddEvent, new AgendaNewEvent(parentWeek.getUserList()) ,
+                    "Nouvel évènement",JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
         eventList.add(new AgendaEvent(this, "event "+cpt));
         System.out.println("hash from start day eventlist "+ eventList.hashCode());
         System.out.println("hash from start day "+this.hashCode());
