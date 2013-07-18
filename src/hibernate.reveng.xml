@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd">
+<hibernate-reverse-engineering>
+  <schema-selection match-catalog="eb"/>
+  <table-filter match-name="eb_relempevent"/>
+  <table-filter match-name="eb_cli"/>
+  <table-filter match-name="eb_country"/>
+  <table-filter match-name="employees"/>
+  <table-filter match-name="typeclient"/>
+  <table-filter match-name="eb_releventempdate"/>
+  <table-filter match-name="eb_travelfees"/>
+  <table-filter match-name="eb_events"/>
+  <table-filter match-name="eb_city"/>
+</hibernate-reverse-engineering>

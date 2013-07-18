@@ -4,18 +4,21 @@
  */
 package beans;
 
+import business.EventUtil;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import javax.swing.JLabel;
+import tables.EbEvents;
 
 /**
  *
  * @author jsmaya
  */
 public class AgendaWeek extends javax.swing.JPanel {
-    private Calendar startOfWeek, dateOfDay;
+    private Calendar startOfWeek, dateOfDay, endOfWeek;
     private List <AgendaDay> dayList;
     private List <AgendaUser> userList;
     private GridBagConstraints gridBagConstraints;
@@ -40,6 +43,7 @@ public class AgendaWeek extends javax.swing.JPanel {
 //            gridBagConstraints.weightx = 1.0;
 //            gridBagConstraints.weighty = 1.0;
             add(userList.get(j));
+            System.out.println("USER = "+userList.get(j).getUserName());
             for(int i=0; i<7; i++){
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1+i;
@@ -47,7 +51,7 @@ public class AgendaWeek extends javax.swing.JPanel {
 //                gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
                 gridBagConstraints.weightx = 0.0;
                 gridBagConstraints.weighty = 0.0;
-                add(new AgendaDay(this, dateOfDay));
+                add(new AgendaDay(this, dateOfDay, userList.get(j)));
                 dateOfDay.add(Calendar.DAY_OF_YEAR, 1);
             }
 //        for(int j=0; j<userList.size(); j++){
@@ -62,14 +66,17 @@ public class AgendaWeek extends javax.swing.JPanel {
             dateOfDay.setTimeInMillis(startOfWeek.getTimeInMillis());
         }
     }
-    public AgendaWeek(AgendaPanel parent, Calendar startOfWeek){
+    public AgendaWeek(AgendaPanel parent, Calendar startOfWeek, 
+            List<EbEvents> ebEventsList, List<AgendaUser> userList){
         this.parentAgenda = parent;
         this.startOfWeek = startOfWeek;
-        userList = new ArrayList<AgendaUser>();
-        userList.add(new AgendaUser("Alain"));userList.add(new AgendaUser("Nico"));
+        endOfWeek = Calendar.getInstance();
+        endOfWeek.setTimeInMillis(startOfWeek.getTimeInMillis());
+        endOfWeek.add(Calendar.DAY_OF_YEAR, 7);
+        userList = userList;
         setLayout(new GridLayout(userList.size(), 8));
 //        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-
+        List<EbEvents> preciseList = EventUtil.preciseEventList(startOfWeek, endOfWeek, ebEventsList);
         dateOfDay = Calendar.getInstance();
         dateOfDay.setTimeInMillis(startOfWeek.getTimeInMillis());
 //        
@@ -80,7 +87,7 @@ public class AgendaWeek extends javax.swing.JPanel {
 //            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
 //            gridBagConstraints.weightx = 1.0;
 //            gridBagConstraints.weighty = 1.0;
-            add(userList.get(j));
+            add(new JLabel(userList.get(j).getInitiales()));
             for(int i=0; i<7; i++){
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1+i;
@@ -88,8 +95,14 @@ public class AgendaWeek extends javax.swing.JPanel {
 //                gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
                 gridBagConstraints.weightx = 0.0;
                 gridBagConstraints.weighty = 0.0;
-                
-                AgendaDay aDay = new AgendaDay(this, dateOfDay);
+                AgendaDay aDay;
+                if(preciseList.isEmpty()){
+                    System.out.println("empty");
+                    aDay = new AgendaDay(this, dateOfDay,userList.get(j));
+                }else{
+                    System.out.println("not empty");
+                    aDay = new AgendaDay(this, dateOfDay, preciseList,userList.get(j));
+                }
                 add(aDay);
 //                new MyDropTargetListImp(aDay);
 

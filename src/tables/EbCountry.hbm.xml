@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 16 juil. 2013 22:43:08 by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="tables.EbCountry" table="eb_country" catalog="eb">
+        <id name="idebCountry" type="java.lang.Integer">
+            <column name="ideb_country" />
+            <generator class="identity" />
+        </id>
+        <property name="ebCountryName" type="string">
+            <column name="eb_countryName" length="45" not-null="true" />
+        </property>
+        <set name="ebCities" inverse="true">
+            <key>
+                <column name="eb_cityCountry" />
+            </key>
+            <one-to-many class="tables.EbCity" />
+        </set>
+        <set name="ebClis" inverse="true">
+            <key>
+                <column name="eb_cliCountry" />
+            </key>
+            <one-to-many class="tables.EbCli" />
+        </set>
+        <set name="ebTravelfeeses" inverse="true">
+            <key>
+                <column name="eb_travelFeesCountry" not-null="true" />
+            </key>
+            <one-to-many class="tables.EbTravelfees" />
+        </set>
+    </class>
+</hibernate-mapping>

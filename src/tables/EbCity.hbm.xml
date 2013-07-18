@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 16 juil. 2013 22:43:08 by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="tables.EbCity" table="eb_city" catalog="eb">
+        <id name="idebCity" type="java.lang.Integer">
+            <column name="ideb_city" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="ebCountry" class="tables.EbCountry" fetch="select">
+            <column name="eb_cityCountry" />
+        </many-to-one>
+        <property name="ebCityName" type="string">
+            <column name="eb_cityName" length="45" />
+        </property>
+    </class>
+</hibernate-mapping>

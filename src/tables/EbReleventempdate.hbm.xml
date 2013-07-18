@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 16 juil. 2013 22:43:08 by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="tables.EbReleventempdate" table="eb_releventempdate" catalog="eb">
+        <composite-id name="id" class="tables.EbReleventempdateId">
+            <key-property name="idebRelEventEmpDate" type="int">
+                <column name="ideb_relEventEmpDate" />
+            </key-property>
+            <key-property name="ebRelEventEmpDateEventId" type="int">
+                <column name="eb_relEventEmpDateEventId" />
+            </key-property>
+            <key-property name="ebRelEventEmpDateEmployee" type="int">
+                <column name="eb_relEventEmpDateEmployee" />
+            </key-property>
+        </composite-id>
+        <property name="ebRelEventEmpDateStart" type="time">
+            <column name="eb_relEventEmpDateStart" length="8" not-null="true" />
+        </property>
+        <property name="ebRelEventEmpDateEnd" type="time">
+            <column name="eb_relEventEmpDateEnd" length="8" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

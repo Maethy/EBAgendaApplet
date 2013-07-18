@@ -5,9 +5,16 @@
 package ui;
 
 import beans.AgendaPanel;
+import beans.AgendaUser;
+import business.EventUtil;
 import com.toedter.calendar.JCalendar;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
+import tables.Employees;
 
 /**
  *
@@ -18,6 +25,9 @@ public class TestApplet extends javax.swing.JApplet {
     private AgendaPanel agenda;
     private JCalendar jcalendar;
     private Calendar startCalendar, endCalendar;
+    private List <AgendaUser> userList;
+    private List<Employees> empList;
+    private HashMap <String, Employees> empMap;
     /**
      * Initializes the applet TestApplet
      */
@@ -81,13 +91,60 @@ public class TestApplet extends javax.swing.JApplet {
         if(endCalendar == null){
             endCalendar = Calendar.getInstance();
         }
-        agenda = new AgendaPanel(startCalendar, endCalendar);
+        if(empMap == null){
+            empMap = new  HashMap();
+        }
+        if(userList == null){
+            userList = new ArrayList();
+            EventUtil.openSession();
+            PopulateUsers();
+        }
+        checkUsers();
+        agenda = new AgendaPanel(startCalendar, endCalendar, this.userList);
         contentScrollPane.setViewportView(agenda);
 //        System.out.println(startCalendar.get(Calendar.WEEK_OF_YEAR));
         this.revalidate();
         Calendar timeElapsed = Calendar.getInstance();
         long millisec =  timeElapsed.getTimeInMillis()-startTimeElapsed.getTimeInMillis();
-        lbTitle.setText("Eurobrevets "+millisec);
+        lbDates.setText("Dates - généré en "+millisec+" ms");
+    }
+    
+    private void PopulateUsers(){
+        empList = EventUtil.getEmployeeList();
+        
+        for(Employees emp : empList){
+            JCheckBox ckb = new JCheckBox();
+            ckb.setText(emp.getInitiales());
+            userPanel.add(ckb);
+            empMap.put(emp.getInitiales(), emp);
+        }
+    }
+    
+    private void checkUsers(){
+        userList = new ArrayList();
+        for(Object o : userPanel.getComponents()){
+            if(o instanceof JCheckBox){
+                JCheckBox ckb = (JCheckBox)o;
+                String initiales = ckb.getText();
+                if(ckb.isSelected()){
+                    if(empMap.containsKey(initiales)){
+                        Employees emp = empMap.get(initiales);
+                        userList.add(new AgendaUser(emp.getFullName(),emp.getInitiales(),
+                        emp.getFonction(), emp.getTelephone(), emp.getMail(), 
+                        emp.getSkype(), emp.getId()));
+                    }
+                }
+            }
+        }
+    }
+    
+    private void checkUserBoxes(boolean check){
+        for(Object o : userPanel.getComponents()){
+            if(o instanceof JCheckBox){
+                JCheckBox ckb = (JCheckBox)o;
+                ckb.setSelected(check);
+            }
+        }
     }
     /**
      * This method is called from within the init() method to initialize the
@@ -104,15 +161,22 @@ public class TestApplet extends javax.swing.JApplet {
         labelEndDate = new javax.swing.JTextField();
         btJCalEnd = new javax.swing.JButton();
         topPanel = new javax.swing.JPanel();
-        lbTitle = new javax.swing.JLabel();
+        lbDates = new javax.swing.JLabel();
         btBuild = new javax.swing.JButton();
         datePanel = new javax.swing.JPanel();
+        btCurWeek = new javax.swing.JButton();
+        btCurWeek1 = new javax.swing.JButton();
         startDatePanel = new javax.swing.JPanel();
         lbStartDate = new javax.swing.JLabel();
         startDateChooser = new com.toedter.calendar.JDateChooser();
         endDatePanel = new javax.swing.JPanel();
         lbEndDate = new javax.swing.JLabel();
         endDateChooser = new com.toedter.calendar.JDateChooser();
+        userPanel = new javax.swing.JPanel();
+        userBtPanel = new javax.swing.JPanel();
+        btAllUser = new javax.swing.JButton();
+        btNoUser = new javax.swing.JButton();
+        lbUsers = new javax.swing.JLabel();
         contentPanel = new javax.swing.JPanel();
         contentScrollPane = new javax.swing.JScrollPane();
 
@@ -140,11 +204,11 @@ public class TestApplet extends javax.swing.JApplet {
 
         topPanel.setLayout(new java.awt.GridBagLayout());
 
-        lbTitle.setText("Eurobrevets");
+        lbDates.setText("Dates");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        topPanel.add(lbTitle, gridBagConstraints);
+        topPanel.add(lbDates, gridBagConstraints);
 
         btBuild.setText("Build");
         btBuild.addActionListener(new java.awt.event.ActionListener() {
@@ -161,13 +225,29 @@ public class TestApplet extends javax.swing.JApplet {
 
         datePanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        lbStartDate.setText("startDate");
+        btCurWeek.setText("Current Week");
+        btCurWeek.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCurWeekActionPerformed(evt);
+            }
+        });
+        datePanel.add(btCurWeek);
+
+        btCurWeek1.setText("Reset");
+        btCurWeek1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCurWeek1ActionPerformed(evt);
+            }
+        });
+        datePanel.add(btCurWeek1);
+
+        lbStartDate.setText("from");
         startDatePanel.add(lbStartDate);
         startDatePanel.add(startDateChooser);
 
         datePanel.add(startDatePanel);
 
-        lbEndDate.setText("endDate");
+        lbEndDate.setText("to");
         endDatePanel.add(lbEndDate);
         endDatePanel.add(endDateChooser);
 
@@ -177,6 +257,34 @@ public class TestApplet extends javax.swing.JApplet {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.weightx = 1.0;
         topPanel.add(datePanel, gridBagConstraints);
+
+        userPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        btAllUser.setText("All");
+        btAllUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAllUserActionPerformed(evt);
+            }
+        });
+        userBtPanel.add(btAllUser);
+
+        btNoUser.setText("None");
+        btNoUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btNoUserActionPerformed(evt);
+            }
+        });
+        userBtPanel.add(btNoUser);
+
+        userPanel.add(userBtPanel);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.weightx = 1.0;
+        topPanel.add(userPanel, gridBagConstraints);
+
+        lbUsers.setText("Users");
+        topPanel.add(lbUsers, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -229,10 +337,31 @@ public class TestApplet extends javax.swing.JApplet {
         }
     }//GEN-LAST:event_btJCalStartActionPerformed
 
+    private void btAllUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAllUserActionPerformed
+        checkUserBoxes(true);
+    }//GEN-LAST:event_btAllUserActionPerformed
+
+    private void btNoUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btNoUserActionPerformed
+        checkUserBoxes(false);
+    }//GEN-LAST:event_btNoUserActionPerformed
+
+    private void btCurWeekActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCurWeekActionPerformed
+        this.startDateChooser.setCalendar(Calendar.getInstance());
+    }//GEN-LAST:event_btCurWeekActionPerformed
+
+    private void btCurWeek1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCurWeek1ActionPerformed
+        this.startDateChooser.setCalendar(null);
+        this.endDateChooser.setCalendar(null);
+    }//GEN-LAST:event_btCurWeek1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btAllUser;
     private javax.swing.JButton btBuild;
+    private javax.swing.JButton btCurWeek;
+    private javax.swing.JButton btCurWeek1;
     private javax.swing.JButton btJCalEnd;
     private javax.swing.JButton btJCalStart;
+    private javax.swing.JButton btNoUser;
     private javax.swing.JPanel contentPanel;
     private javax.swing.JScrollPane contentScrollPane;
     private javax.swing.JPanel datePanel;
@@ -240,11 +369,14 @@ public class TestApplet extends javax.swing.JApplet {
     private javax.swing.JPanel endDatePanel;
     private javax.swing.JTextField labelEndDate;
     private javax.swing.JTextField labelStartDate;
+    private javax.swing.JLabel lbDates;
     private javax.swing.JLabel lbEndDate;
     private javax.swing.JLabel lbStartDate;
-    private javax.swing.JLabel lbTitle;
+    private javax.swing.JLabel lbUsers;
     private com.toedter.calendar.JDateChooser startDateChooser;
     private javax.swing.JPanel startDatePanel;
     private javax.swing.JPanel topPanel;
+    private javax.swing.JPanel userBtPanel;
+    private javax.swing.JPanel userPanel;
     // End of variables declaration//GEN-END:variables
 }
