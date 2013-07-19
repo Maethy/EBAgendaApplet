@@ -4,6 +4,7 @@
  */
 package beans;
 
+import business.EventUtil;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -13,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import javax.swing.JButton;
@@ -21,6 +23,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import tables.EbEvents;
+import tables.EbReleventempdate;
 
 /**
  *
@@ -72,6 +76,7 @@ public class AgendaDay extends javax.swing.JPanel {
     private AgendaWeek parentWeek;
     private List <AgendaEvent> eventList;
     private javax.swing.JLabel dayNumber;
+    private AgendaUser user;
     private boolean isToday;
     private JButton btAddEvent, btMore, btnb;
     private JScrollPane jScrollPane;
@@ -126,8 +131,92 @@ public class AgendaDay extends javax.swing.JPanel {
         
     }
     
-    public AgendaDay(AgendaWeek parent, Calendar dateOfDay){
+    public AgendaDay(AgendaWeek parent, Calendar dateOfDay, AgendaUser user){
         
+        parentWeek = parent;
+        this.user = user;
+        DropTarget dropTarget;
+        dropTarget = new DropTarget(this, DnDConstants.ACTION_MOVE, 
+                new MyDropTargetListImp(this), true, null);
+        this.setDropTarget(dropTarget);
+        
+        this.setPreferredSize(new Dimension(64, 156));
+        setLayout(new BorderLayout());
+        
+        eventList = new ArrayList();
+        contentPane = new JPanel();
+        contentPane.setLayout(new GridLayout(0,1));
+        this.dateOfDay = dateOfDay;
+        
+        //Set larger borders for today
+        if((this.dateOfDay.get(Calendar.DAY_OF_YEAR)== Calendar.getInstance().
+                get(Calendar.DAY_OF_YEAR))&&(this.dateOfDay.
+                get(Calendar.WEEK_OF_YEAR)== Calendar.getInstance().
+                get(Calendar.WEEK_OF_YEAR))&&(this.dateOfDay.
+                get(Calendar.YEAR)== Calendar.getInstance().
+                get(Calendar.YEAR))){
+            setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 51, 51), 2));
+        }else{
+            setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        }
+        
+        //Set color background for current week
+        if((this.dateOfDay.get(Calendar.WEEK_OF_YEAR)== Calendar.getInstance().
+                get(Calendar.WEEK_OF_YEAR))&&(this.dateOfDay.
+                get(Calendar.YEAR)== Calendar.getInstance().
+                get(Calendar.YEAR))){
+            this.setBackground(new java.awt.Color(50, 150, 230));
+        }
+        btMore = new JButton("...");
+        btMore.setMargin(new java.awt.Insets(1, 13, 1, 13));
+        btMore.setContentAreaFilled(false);
+        btMore.setBackground(getBackground().brighter());
+        btMore.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                displayEvents();
+            }
+            
+            
+        });
+        btAddEvent = new JButton("new");
+        btAddEvent.setMargin(new java.awt.Insets(1, 13, 1, 13));
+        btAddEvent.setContentAreaFilled(false);
+        btAddEvent.setBackground(getBackground());
+        btAddEvent.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                addEvent();
+            }
+            
+        });
+
+        btnb = new JButton("nb");
+        btnb.setMargin(new java.awt.Insets(1, 13, 1, 13));
+        btnb.setContentAreaFilled(false);
+        btnb.setBackground(getBackground());
+        btnb.addActionListener(new ActionListener(){
+            ListSurvey ls = new ListSurvey(AgendaDay.this);
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                ls.start();
+            }
+            
+        });
+        contentPane.setBackground(getBackground());
+        dayNumber = new javax.swing.JLabel
+                (""+dateOfDay.get(Calendar.DAY_OF_MONTH)+" "+dateOfDay.
+                getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.FRENCH)
+                +" "+dateOfDay.get(Calendar.YEAR)+" "+this.hashCode());
+        add(btAddEvent, BorderLayout.PAGE_END);
+//        displayEvents();
+    }
+    
+     public AgendaDay(AgendaWeek parent, Calendar dateOfDay, List<EbEvents> list, AgendaUser user){
+        
+        this.user = user;
         parentWeek = parent;
         
         DropTarget dropTarget;
@@ -207,12 +296,33 @@ public class AgendaDay extends javax.swing.JPanel {
 //                +" "+dateOfDay.get(Calendar.YEAR)+" "+this.hashCode());
         add(dayNumber, BorderLayout.PAGE_START);
         add(contentPane, BorderLayout.CENTER);
-//        add(btMore, BorderLayout.WEST);
-//        add(btnb, BorderLayout.EAST);
         add(btAddEvent, BorderLayout.PAGE_END);
-//        displayEvents();
+        addFromList(list);
+        displayEvents();
+        
+        
     }
 
+    private void addFromList(List<EbEvents> list){
+        System.out.println("adding from list");
+        for(EbEvents ee : list){
+            Date from = ee.getEbEventsStartDate();
+            Date to = ee.getEbEventsEndDate();
+            from.setTime(from.getTime()-86400);
+            to.setTime(to.getTime()+86400);
+            if(this.dateOfDay.getTime().before(to)
+                    &&this.dateOfDay.getTime().after(from)){
+                EbReleventempdate eventDate =EventUtil.getEventUser(ee.getIdebEvent(), this.user.getId());
+                if(eventDate!=null){
+                    eventList.add(new AgendaEvent(this, ee.getEbEventsName(), 
+                            ee.getIdebEvent(), 
+                            eventDate.getEbRelEventEmpDateStart(),
+                            eventDate.getEbRelEventEmpDateEnd()));
+                }
+            }
+        }
+    }
+    
     public JPanel getContentPane() {
         return contentPane;
     }

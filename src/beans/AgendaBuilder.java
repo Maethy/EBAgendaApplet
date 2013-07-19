@@ -37,7 +37,7 @@ public class AgendaBuilder {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                new AgendaPanel(startCalendar, null);
+//                new AgendaPanel(startCalendar, null);
             }
         });
 //        
@@ -47,7 +47,7 @@ public class AgendaBuilder {
         
     }
     
-    public static AgendaPanel createAgenda(Calendar startCalendar, Calendar endCalendar){
-        return new AgendaPanel(startCalendar, endCalendar);
-    }
+//    public static AgendaPanel createAgenda(Calendar startCalendar, Calendar endCalendar){
+//        return new AgendaPanel(startCalendar, endCalendar);
+//    }
 }
