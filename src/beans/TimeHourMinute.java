@@ -43,6 +43,14 @@ public class TimeHourMinute {
     public void setMinute(int minute) {
         this.minute = minute;
     }
+    
+    public TimeHourMinute addTHM(TimeHourMinute thm){
+        int newHour = 0;
+        int newMinute = 0;
+        newHour = this.hour + thm.hour + (this.minute + thm.minute)/60;
+        newMinute = (this.minute + thm.minute)%60;
+        return new TimeHourMinute(newHour, newMinute);
+    }
 
     @Override
     public String toString() {

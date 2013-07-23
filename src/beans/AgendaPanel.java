@@ -6,10 +6,9 @@ package beans;
 
 import business.EventUtil;
 import com.toedter.calendar.JCalendar;
-import java.awt.GridLayout;
+import java.awt.Component;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
@@ -42,12 +41,12 @@ public class AgendaPanel extends JPanel {
         this.startCalendar = Calendar.getInstance();
         this.endCalendar = endCalendar;
         this.startCalendar.setTime(startCalendar.getTime());
+        setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.PAGE_AXIS));
         initComponents();
     }
 
     private void initComponents(){
         title = new JLabel("EuroBrevets Agenda");  
-       
         add(title);
         add(new JSeparator());
         int nbWeeks = 4;
@@ -61,18 +60,9 @@ public class AgendaPanel extends JPanel {
             nbYears = endCalendar.get(Calendar.YEAR)-
                     startCalendar.get(Calendar.YEAR);
             if(nbYears>0){      //l'année de fin est au moins l'année suivante à celle du début
-//                if(nbWeeks<0){
-//                    nbWeeks=nbWeeks+52;
-//                    System.out.println("nbWeeks négatif");
-//                }else{
                     nbWeeks = (nbYears * 52) + nbWeeks;
-                    System.out.println("nbWeeks supérieur à 1 an donc "+nbWeeks);
-//                }
             }
-//            nbYears++;  //au moins l'année en cours
-//            nbWeeks = (nbYears * 52) + nbWeeks;
         }
-//        System.out.println(nbWeeks);
         int currentDay = startCalendar.get((Calendar.DAY_OF_WEEK)-1)%7;
         int lastCurrentDay = endCalendar.get((Calendar.DAY_OF_WEEK)-1)%7;
 //        currentDay--;
@@ -85,11 +75,8 @@ public class AgendaPanel extends JPanel {
             add(new AgendaWeek(this, startCalendar, rs, userList));
             startCalendar.add(Calendar.WEEK_OF_YEAR, 1);
             add(new JSeparator());           
-            add(new JSeparator());
         }
         revalidate();
-//        setLayout(new GridLayout(0,1));
-        setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.PAGE_AXIS));
     }
     
 }

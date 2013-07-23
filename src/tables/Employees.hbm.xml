@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 22-juil.-2013 9:26:49 by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="tables.Employees" table="employees" catalog="eb">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="idEmpl" type="int">
+            <column name="IdEmpl" not-null="true" />
+        </property>
+        <property name="fullName" type="string">
+            <column name="FullName" not-null="true" />
+        </property>
+        <property name="initiales" type="string">
+            <column name="Initiales" length="10" not-null="true" />
+        </property>
+        <property name="fonction" type="string">
+            <column name="Fonction" length="50" />
+        </property>
+        <property name="telephone" type="string">
+            <column name="Telephone" length="20" />
+        </property>
+        <property name="mail" type="string">
+            <column name="Mail" length="50" />
+        </property>
+        <property name="mail2" type="string">
+            <column name="Mail2" length="50" />
+        </property>
+        <property name="skype" type="string">
+            <column name="Skype" length="50" />
+        </property>
+        <property name="login" type="string">
+            <column name="Login" not-null="true" />
+        </property>
+        <property name="pass" type="string">
+            <column name="Pass" not-null="true" />
+        </property>
+        <property name="disableEmpl" type="boolean">
+            <column name="DisableEmpl" not-null="true" />
+        </property>
+        <set name="ebReleventempdates" inverse="true">
+            <key>
+                <column name="eb_relEventEmpDateEmployee" not-null="true" />
+            </key>
+            <one-to-many class="tables.EbReleventempdate" />
+        </set>
+        <set name="ebRelempevents" inverse="true">
+            <key>
+                <column name="eb_relEmpEventEmpId" not-null="true" />
+            </key>
+            <one-to-many class="tables.EbRelempevent" />
+        </set>
+    </class>
+</hibernate-mapping>

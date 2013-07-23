@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 22-juil.-2013 9:26:49 by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="tables.EbTravelfees" table="eb_travelfees" catalog="eb">
+        <id name="idebTravelFees" type="int">
+            <column name="ideb_travelFees" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="ebCountry" class="tables.EbCountry" fetch="select">
+            <column name="eb_travelFeesCountry" not-null="true" />
+        </many-to-one>
+        <property name="ebTravelFeesDate" type="date">
+            <column name="eb_travelFeesDate" length="10" not-null="true" />
+        </property>
+        <property name="ebTravelFeesFee" type="int">
+            <column name="eb_travelFeesFee" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

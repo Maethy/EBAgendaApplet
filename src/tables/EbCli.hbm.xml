@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 22-juil.-2013 9:26:49 by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="tables.EbCli" table="eb_cli" catalog="eb">
+        <id name="idebCli" type="java.lang.Integer">
+            <column name="ideb_cli" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="typeclient" class="tables.Typeclient" fetch="select">
+            <column name="eb_cliTypeClient" />
+        </many-to-one>
+        <many-to-one name="ebCountry" class="tables.EbCountry" fetch="select">
+            <column name="eb_cliCountry" />
+        </many-to-one>
+        <property name="ebCliname" type="string">
+            <column name="eb_cliname" />
+        </property>
+        <property name="ebCliFriendName" type="string">
+            <column name="eb_cliFriendName" length="100" />
+        </property>
+        <property name="ebCliStreet" type="string">
+            <column name="eb_cliStreet" />
+        </property>
+        <property name="ebCliCity" type="string">
+            <column name="eb_cliCity" />
+        </property>
+        <property name="ebCliPostCode" type="string">
+            <column name="eb_cliPostCode" length="45" />
+        </property>
+        <property name="ebCliTelGeneral" type="string">
+            <column name="eb_cliTelGeneral" length="45" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -35,7 +35,12 @@ public class DateTimeBean extends JPanel {
     public void setDateTime(Calendar dateTime) {
         Calendar oldDateTime = this.dateTime;
         this.dateTime = dateTime;
-        propertyChangeSupport.firePropertyChange(PROP_DATETIME, oldDateTime, dateTime);
+        this.jDateChooser1.setCalendar(dateTime);
+        this.timeComboBox2.setSelectedItem(new TimeHourMinute
+                (dateTime.get(Calendar.HOUR_OF_DAY),
+                dateTime.get(Calendar.MINUTE)));
+        propertyChangeSupport.firePropertyChange
+                (PROP_DATETIME, oldDateTime, dateTime);
     }
     private transient final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
@@ -97,10 +102,11 @@ public class DateTimeBean extends JPanel {
         Calendar calendar = this.jDateChooser1.getCalendar();
         if(calendar !=null){
             thm = (TimeHourMinute) this.timeComboBox2.getSelectedItem();
-            calendar.set(Calendar.HOUR, thm.getHour());
+            calendar.set(Calendar.HOUR_OF_DAY, thm.getHour());
             calendar.set(Calendar.MINUTE, thm.getMinute());
             calendar.set(Calendar.SECOND, 0);
             this.setDateTime(calendar);
+            System.out.println(this.dateTime.getTime());
         }
     }
     private void jDateChooser1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jDateChooser1PropertyChange
@@ -108,6 +114,7 @@ public class DateTimeBean extends JPanel {
     }//GEN-LAST:event_jDateChooser1PropertyChange
 
     private void timeComboBox2PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_timeComboBox2PropertyChange
+        System.out.println(((TimeHourMinute)this.timeComboBox2.getSelectedItem()).toString());
         mergeDateTime();
     }//GEN-LAST:event_timeComboBox2PropertyChange
 

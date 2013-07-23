@@ -5,12 +5,15 @@
 package beans;
 
 import business.EventUtil;
+import java.awt.Component;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import tables.EbEvents;
 
 /**
@@ -21,66 +24,26 @@ public class AgendaWeek extends javax.swing.JPanel {
     private Calendar startOfWeek, dateOfDay, endOfWeek;
     private List <AgendaDay> dayList;
     private List <AgendaUser> userList;
+    private List <EbEvents> eventsList;
     private GridBagConstraints gridBagConstraints;
     private AgendaPanel parentAgenda;
     private JPanel header;
+    private JLabel lbUserName;
     
-    
-    public AgendaWeek(){
-        this.startOfWeek = Calendar.getInstance();
-        userList = new ArrayList<AgendaUser>();
-        userList.add(new AgendaUser("Alain"));userList.add(new AgendaUser("Nico"));userList.add(new AgendaUser("Jeff"));userList.add(new AgendaUser("Myriam"));userList.add(new AgendaUser("Manu"));userList.add(new AgendaUser("Luis"));userList.add(new AgendaUser("Gino"));userList.add(new AgendaUser("JS"));userList.add(new AgendaUser("J-C"));
-        setLayout(new GridLayout(userList.size(), 8));
-//        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-
-        dateOfDay = Calendar.getInstance();
-        dateOfDay.setTimeInMillis(startOfWeek.getTimeInMillis());
-//        
-        for(int j=0; j<userList.size(); j++){
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 0;
-//            gridBagConstraints.gridy = 0;
-//            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-//            gridBagConstraints.weightx = 1.0;
-//            gridBagConstraints.weighty = 1.0;
-            add(userList.get(j));
-            System.out.println("USER = "+userList.get(j).getUserName());
-            for(int i=0; i<7; i++){
-                gridBagConstraints = new java.awt.GridBagConstraints();
-                gridBagConstraints.gridx = 1+i;
-//                gridBagConstraints.gridy = 1;
-//                gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-                gridBagConstraints.weightx = 0.0;
-                gridBagConstraints.weighty = 0.0;
-                add(new AgendaDay(this, dateOfDay, userList.get(j)));
-                dateOfDay.add(Calendar.DAY_OF_YEAR, 1);
-            }
-//        for(int j=0; j<userList.size(); j++){
-//            JPanel userPanel = new JPanel();
-//            userPanel.setLayout(new BoxLayout(userPanel, BoxLayout.LINE_AXIS));
-//            userPanel.add(userList.get(j));
-//            for(int i=0; i<7; i++){
-//                userPanel.add(new AgendaDay(dateOfDay));
-//                dateOfDay.add(Calendar.DAY_OF_YEAR, 1);
-//            }
-//            add(userPanel);
-            dateOfDay.setTimeInMillis(startOfWeek.getTimeInMillis());
-        }
-    }
     public AgendaWeek(AgendaPanel parent, Calendar startOfWeek, 
             List<EbEvents> ebEventsList, List<AgendaUser> userList){
         this.parentAgenda = parent;
         this.startOfWeek = startOfWeek;
+        lbUserName =  new JLabel();
         endOfWeek = Calendar.getInstance();
         endOfWeek.setTimeInMillis(startOfWeek.getTimeInMillis());
         endOfWeek.add(Calendar.DAY_OF_YEAR, 7);
-        userList = userList;
-        setLayout(new GridLayout(userList.size(), 8));
-//        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        this.userList = userList;
+        setLayout(new GridLayout(userList.size()+1, 8));
+        setLayout(new GridBagLayout());
         List<EbEvents> preciseList = EventUtil.preciseEventList(startOfWeek, endOfWeek, ebEventsList);
         dateOfDay = Calendar.getInstance();
         dateOfDay.setTimeInMillis(startOfWeek.getTimeInMillis());
-//      
         JPanel userHeaderPanel = new JPanel();
         JLabel userHeader = new JLabel("User");
         userHeader.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -91,52 +54,67 @@ public class AgendaWeek extends javax.swing.JPanel {
                     +commons.Constants.DAY_OF_WEEK[i]+"<br>"
                     +dateOfDay.get(Calendar.DAY_OF_MONTH)+"-"+dateOfDay.
                     get(Calendar.MONTH+1)+"-"+dateOfDay.get(Calendar.YEAR)
-                    +" numWeek "+dateOfDay.getMinimalDaysInFirstWeek()+"</center></body></html>";
+                    +" numWeek </center></body></html>";
             JPanel dayHeaderPanel = new JPanel();
             JLabel dayHeader = new javax.swing.JLabel(date);
             dayHeaderPanel.setLayout
                     (new BoxLayout(dayHeaderPanel, BoxLayout.PAGE_AXIS));
             dayHeaderPanel.add(dayHeader);
             dayHeader.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-            add(dayHeaderPanel);
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx = i+1;
+            gridBagConstraints.gridy = 0;
+            gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+            add(dayHeaderPanel, gridBagConstraints);
             dateOfDay.add(Calendar.DAY_OF_YEAR, 1);
         }
         dateOfDay.setTimeInMillis(startOfWeek.getTimeInMillis());
         for(int j=0; j<userList.size(); j++){
-            gridBagConstraints = new java.awt.GridBagConstraints();
-            gridBagConstraints.gridx = 0;
-//            gridBagConstraints.gridy = 0;
-//            gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-//            gridBagConstraints.weightx = 1.0;
-//            gridBagConstraints.weighty = 1.0;
-            add(new JLabel(userList.get(j).getInitiales()));
-            for(int i=0; i<7; i++){
                 gridBagConstraints = new java.awt.GridBagConstraints();
-                gridBagConstraints.gridx = 1+i;
-                gridBagConstraints.weightx = 0.0;
-                gridBagConstraints.weighty = 0.0;
+                gridBagConstraints.gridx = 0;
+//                gridBagConstraints.gridy = 0;
+                gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+                gridBagConstraints.weightx = 1.0;
+                gridBagConstraints.weighty = 1.0;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            lbUserName =  new JLabel(userList.get(j).getInitiales());
+            add(lbUserName, gridBagConstraints);
+            for(int i=0; i<7; i++){
                 AgendaDay aDay;
+                Calendar newCal = Calendar.getInstance();
+                newCal.setTimeInMillis(dateOfDay.getTimeInMillis());
                 if(preciseList.isEmpty()){
-                    System.out.println("empty");
-                    aDay = new AgendaDay(this, dateOfDay,userList.get(j));
+                    aDay = new AgendaDay(this, newCal,userList.get(j));
                 }else{
-                    System.out.println("not empty");
-                    aDay = new AgendaDay(this, dateOfDay, preciseList,userList.get(j));
+                    aDay = new AgendaDay(this, newCal, preciseList,userList.get(j));
                 }
-                add(aDay);
-//                new MyDropTargetListImp(aDay);
-
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = i+1;
+//                gridBagConstraints.gridy = 0;
+                gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+                gridBagConstraints.weightx = 1.0;
+                gridBagConstraints.weighty = 1.0;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                add(aDay, gridBagConstraints);
                 dateOfDay.add(Calendar.DAY_OF_YEAR, 1);
             }
-//        for(int j=0; j<userList.size(); j++){
-//            JPanel userPanel = new JPanel();
-//            userPanel.setLayout(new BoxLayout(userPanel, BoxLayout.LINE_AXIS));
-//            userPanel.add(userList.get(j));
-//            for(int i=0; i<7; i++){
-//                userPanel.add(new AgendaDay(dateOfDay));
-//                dateOfDay.add(Calendar.DAY_OF_YEAR, 1);
-//            }
-//            add(userPanel);
+            TimeHourMinute timeOfWeek = new TimeHourMinute();
+            for(Component comp : this.getComponents()){
+                if(comp instanceof AgendaDay){
+                    TimeHourMinute timeOfDay = ((AgendaDay)comp).computeWorkTime();
+                    timeOfWeek = timeOfWeek.addTHM(timeOfDay);
+                    if(timeOfDay.getHour()>0){
+                        System.out.println("TOD: "+timeOfDay+"TOW: "+timeOfWeek);
+                    }
+                }
+            }
+
+            if(timeOfWeek.getHour()>0||timeOfWeek.getMinute()>0){
+                System.out.println(this.dateOfDay.getTime()+" THMWeek: "+timeOfWeek);
+            }
+            lbUserName.setText("<html><body>"+lbUserName.getText()+"<br>"
+                    + "Time this week: "+timeOfWeek.toString()+
+                    "</body></html>");
             dateOfDay.setTimeInMillis(startOfWeek.getTimeInMillis());
         }
     }
@@ -148,6 +126,5 @@ public class AgendaWeek extends javax.swing.JPanel {
     public List<AgendaUser> getUserList() {
         return userList;
     }
-    
     
 }

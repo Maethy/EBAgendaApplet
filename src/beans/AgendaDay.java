@@ -7,6 +7,8 @@ package beans;
 import business.EventUtil;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
@@ -14,7 +16,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import javax.swing.JButton;
@@ -31,46 +32,6 @@ import tables.EbReleventempdate;
  * @author jsmaya
  */
 
-class ListSurvey extends Thread {
-
-    private AgendaDay day;
-    public ListSurvey(AgendaDay day) {
-        this.day = day;
-    }
-
-    
-    @Override
-    public void run() {
-        int size;
-        int oldsize;
-        size = day.getEventList().size();
-        day.getBtMore().setText(size+"");
-        oldsize = size;
-        while(true){
-            try{
-                if(oldsize != size){
-                    System.out.println(oldsize+"  "+size);
-                }
-                oldsize = size;
-                if(oldsize == 0 && size == 1){
-                    JOptionPane.showMessageDialog(day, "ERROR");
-                }
-                if(Integer.parseInt(day.getBtMore().getText())>size){
-                    System.out.println("ERROR");
-                }else{
-                    day.getBtMore().setText(size+"");
-                }
-                size = day.getEventList().size();
-//                sleep(5);
-//            }catch(InterruptedException ie){
-//                System.out.println("interrupted");
-            }catch(Exception e){
-                
-            }
-        }
-    }
-    
-}
 public class AgendaDay extends javax.swing.JPanel {
     private Calendar dateOfDay;
     private AgendaWeek parentWeek;
@@ -78,16 +39,14 @@ public class AgendaDay extends javax.swing.JPanel {
     private javax.swing.JLabel dayNumber;
     private AgendaUser user;
     private boolean isToday;
-    private JButton btAddEvent, btMore, btnb;
+    private JButton btAddEvent, btMore;
     private JScrollPane jScrollPane;
-    public static int cpt = 0;
     private JPanel contentPane;
     
     public AgendaDay(){
         dateOfDay = Calendar.getInstance();
         this.setPreferredSize(new Dimension(64, 96));
         setLayout(new GridLayout(0,1));
-//        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         eventList = new ArrayList();
         
         //Set larger borders for today
@@ -123,7 +82,7 @@ public class AgendaDay extends javax.swing.JPanel {
             }
             
         });
-        setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.PAGE_AXIS));
+//        setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.PAGE_AXIS));
         dayNumber = new javax.swing.JLabel
                 (""+dateOfDay.get(Calendar.DAY_OF_MONTH)+" "+dateOfDay.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.FRENCH)+" "+dateOfDay.get(Calendar.YEAR));
         displayEvents();    
@@ -147,6 +106,7 @@ public class AgendaDay extends javax.swing.JPanel {
         contentPane = new JPanel();
         contentPane.setLayout(new GridLayout(0,1));
         this.dateOfDay = dateOfDay;
+        this.dateOfDay.set(Calendar.HOUR_OF_DAY, 12);
         
         //Set larger borders for today
         if((this.dateOfDay.get(Calendar.DAY_OF_YEAR)== Calendar.getInstance().
@@ -193,23 +153,11 @@ public class AgendaDay extends javax.swing.JPanel {
             
         });
 
-        btnb = new JButton("nb");
-        btnb.setMargin(new java.awt.Insets(1, 13, 1, 13));
-        btnb.setContentAreaFilled(false);
-        btnb.setBackground(getBackground());
-        btnb.addActionListener(new ActionListener(){
-            ListSurvey ls = new ListSurvey(AgendaDay.this);
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                ls.start();
-            }
-            
-        });
         contentPane.setBackground(getBackground());
         dayNumber = new javax.swing.JLabel
                 (""+dateOfDay.get(Calendar.DAY_OF_MONTH)+" "+dateOfDay.
-                getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.FRENCH)
-                +" "+dateOfDay.get(Calendar.YEAR)+" "+this.hashCode());
+                getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.FRENCH));
+        add(dayNumber, BorderLayout.PAGE_START);
         add(btAddEvent, BorderLayout.PAGE_END);
 //        displayEvents();
     }
@@ -225,13 +173,14 @@ public class AgendaDay extends javax.swing.JPanel {
         this.setDropTarget(dropTarget);
         
         this.setPreferredSize(new Dimension(64, 156));
-        setLayout(new BorderLayout());
+        setLayout(new GridBagLayout());//BorderLayout());
         
         eventList = new ArrayList();
         contentPane = new JPanel();
-        contentPane.setLayout(new GridLayout(0,1));
+        contentPane.setLayout(new GridBagLayout());//GridLayout(0,1));
         this.dateOfDay = dateOfDay;
-        
+        this.dateOfDay.set(Calendar.HOUR_OF_DAY, 12);
+
         //Set larger borders for today
         if((this.dateOfDay.get(Calendar.DAY_OF_YEAR)== Calendar.getInstance().
                 get(Calendar.DAY_OF_YEAR))&&(this.dateOfDay.
@@ -276,51 +225,70 @@ public class AgendaDay extends javax.swing.JPanel {
             }
             
         });
-//
-//        btnb = new JButton("nb");
-//        btnb.setMargin(new java.awt.Insets(1, 13, 1, 13));
-//        btnb.setContentAreaFilled(false);
-//        btnb.setBackground(getBackground());
-//        btnb.addActionListener(new ActionListener(){
-//            ListSurvey ls = new ListSurvey(AgendaDay.this);
-//            @Override
-//            public void actionPerformed(ActionEvent ae) {
-//                ls.start();
-//            }
-//            
-//        });
+
         contentPane.setBackground(getBackground());
         dayNumber = new javax.swing.JLabel
                 (""+dateOfDay.get(Calendar.DAY_OF_MONTH)+" "+dateOfDay.
                 getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.FRENCH));
-//                +" "+dateOfDay.get(Calendar.YEAR)+" "+this.hashCode());
-        add(dayNumber, BorderLayout.PAGE_START);
-        add(contentPane, BorderLayout.CENTER);
-        add(btAddEvent, BorderLayout.PAGE_END);
+        GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.gridx=0;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        add(dayNumber, gridBagConstraints);//, BorderLayout.PAGE_START);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.gridx=0;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        add(contentPane,gridBagConstraints);// BorderLayout.CENTER);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.gridx=0;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        add(btAddEvent, gridBagConstraints);//BorderLayout.PAGE_END);
         addFromList(list);
         displayEvents();
         
         
     }
-
+     
     private void addFromList(List<EbEvents> list){
-        System.out.println("adding from list");
+        System.out.println("Add from list Event list size: "+eventList.size());
         for(EbEvents ee : list){
-            Date from = ee.getEbEventsStartDate();
-            Date to = ee.getEbEventsEndDate();
-            from.setTime(from.getTime()-86400);
-            to.setTime(to.getTime()+86400);
-            if(this.dateOfDay.getTime().before(to)
-                    &&this.dateOfDay.getTime().after(from)){
-                EbReleventempdate eventDate =EventUtil.getEventUser(ee.getIdebEvent(), this.user.getId());
-                if(eventDate!=null){
-                    eventList.add(new AgendaEvent(this, ee.getEbEventsName(), 
-                            ee.getIdebEvent(), 
-                            eventDate.getEbRelEventEmpDateStart(),
-                            eventDate.getEbRelEventEmpDateEnd()));
+            Calendar from = Calendar.getInstance();
+            from.setTime(ee.getEbEventsStartDate());
+            Calendar to = Calendar.getInstance();
+            to.setTime(ee.getEbEventsEndDate());
+//            System.out.println(from.getTime());
+//            System.out.println(to.getTime());
+//            System.out.println(dateOfDay.getTime());
+            if(this.dateOfDay.get(Calendar.DAY_OF_YEAR)
+                    <=to.get(Calendar.DAY_OF_YEAR)
+                    &&this.dateOfDay.get(Calendar.DAY_OF_YEAR)
+                    >=from.get(Calendar.DAY_OF_YEAR)){
+                List<EbReleventempdate> eventDate =EventUtil.getEventUser(ee.getIdebEvent(), this.user.getId());
+                if(eventDate.size()>0){
+                    for(EbReleventempdate eventEmpDate : eventDate){
+                        Calendar eventCalendar = Calendar.getInstance();
+                        eventCalendar.setTime(eventEmpDate.getEbRelEventEmpDateStart());
+                        if(eventCalendar.get(Calendar.DAY_OF_YEAR)==this.dateOfDay.get(Calendar.DAY_OF_YEAR)){
+                            Calendar cal1, cal2;
+                            cal1 = Calendar.getInstance();
+                            cal2 = Calendar.getInstance();
+                            cal1.setTime(eventEmpDate.getEbRelEventEmpDateStart());
+                            cal2.setTime(eventEmpDate.getEbRelEventEmpDateEnd());
+                            eventList.add(new AgendaEvent(this, ee.getEbEventsName(), 
+                                    eventEmpDate.getIdebRelEventEmpDate(),
+                                    cal1, cal2));
+                        }
+                    }
                 }
             }
         }
+        System.out.println("Bdd from list Event list size: "+eventList.size());
     }
     
     public JPanel getContentPane() {
@@ -337,53 +305,114 @@ public class AgendaDay extends javax.swing.JPanel {
 
     private void showMore(){
         JList jListEvent = new JList();
+        JPanel eventListPanel = new JPanel();
+        eventListPanel.setLayout(new GridLayout(0,4));
         for(AgendaEvent e : eventList){
-            jListEvent.add(e);
+            eventListPanel.add(new AgendaEvent(e));
         }
+        Object [] panelTab = new Object[1];
+        panelTab[0] = eventListPanel;
         JOptionPane.showOptionDialog(this, jListEvent, "",
                 JOptionPane.CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE,
-                null, eventList.toArray(), null);
+                null, panelTab, null);
     }
     
     
     private void addEvent(){
 //        JOptionPane.showInputDialog(this.btAddEvent, new AgendaNewEvent(parentWeek.getUserList()));
-        JOptionPane.showOptionDialog(this.btAddEvent, new AgendaNewEvent(parentWeek.getUserList()) ,
-                    "Nouvel évènement",JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-        eventList.add(new AgendaEvent(this, "event "+cpt));
-        System.out.println("hash from start day eventlist "+ eventList.hashCode());
-        System.out.println("hash from start day "+this.hashCode());
-        cpt++;
-        displayEvents();
+        AgendaNewEvent ane;
+        if(eventList.size()>0){
+            ane = new AgendaNewEvent
+                    ((eventList.get(eventList.size()-1)).getEnd());
+        }else{
+            Calendar today = Calendar.getInstance();
+            today.setTime(this.dateOfDay.getTime());
+            today.set(Calendar.HOUR_OF_DAY, 9);
+            today.set(Calendar.MINUTE, 0);
+            ane = new AgendaNewEvent(today);
+        }
+        if(JOptionPane.showOptionDialog(this.btAddEvent, ane ,
+                    "Nouvel évènement",JOptionPane.OK_CANCEL_OPTION, 
+                    JOptionPane.QUESTION_MESSAGE, null, null, null)
+                == JOptionPane.OK_OPTION){
+            System.out.println(ane.getStartTime().get(Calendar.DAY_OF_MONTH)
+                    +"/"+ane.getStartTime().get(Calendar.MONTH)
+                    +"/"+ane.getStartTime().get(Calendar.YEAR));
+            
+            List<EbEvents> listOneEvent = new ArrayList();                              //Création d'une liste pour accueillir le nouvel évènement créé
+            listOneEvent.add(EventUtil.addEvent(ane.getEventName(), ane.getEventDesc(), //On crée le nouvel évènement, et on le récupère dans la liste
+                ane.getStartTime(), ane.getEndTime(), 
+                ane.getClient().getIdebCli(), ane.getEmployees()));                     
+                                                                                        
+            
+            EventUtil.gettApp().reload();
+            //addFromList(listOneEvent);              //On va maintenant récupérer les objets pour cet évènement pour les jours et utilisateurs concernés.
+            //displayEvents();                        //On rafraichit l'affichage des évènements.
+        }
     }
     
     public void displayEvents(){  
-        System.out.println("nb events before remove all: "+contentPane.getComponentCount()+" list: "+eventList.size());
-        contentPane.removeAll();
-        System.out.println("nb events after remove all: "+contentPane.getComponentCount()+" list: "+eventList.size());
+        System.out.println("A display Event list size: "+eventList.size());
+        contentPane.removeAll();        
+        GridBagConstraints gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx=0;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         if(eventList.size()>2){
-//            System.out.println(eventList.hashCode());
             for(int i =0; i<2; i++){
                 AgendaEvent ae = eventList.get(i);
-                contentPane.add(ae);
-                contentPane.add(new JSeparator());
-                System.out.println(i);
+                contentPane.add(ae, gridBagConstraints);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx=0;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                contentPane.add(new JSeparator(), gridBagConstraints);
             }
-            contentPane.add(btMore);
+            gridBagConstraints = new java.awt.GridBagConstraints();
+            gridBagConstraints.gridx=0;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.weighty = 1.0;
+            gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+            contentPane.add(btMore, gridBagConstraints);
         }else{
-//            System.out.println(eventList.hashCode());
             for(AgendaEvent ae : eventList){
-                System.out.println(ae.getSummary());
-                contentPane.add(ae);
-                contentPane.add(new JSeparator());
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx=0;
+                gridBagConstraints.weightx = 1.0;
+                gridBagConstraints.weighty = 1.0;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                contentPane.add(ae, gridBagConstraints);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx=0;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                contentPane.add(new JSeparator(), gridBagConstraints);
             }
         }
-        System.out.println("nb events : "+contentPane.getComponentCount());
-        System.out.println(getDayNumber()+" refreshed");
+        System.out.println("B display Event list size: "+eventList.size());
         validate();
-        System.out.println("nb events after validate: "+contentPane.getComponentCount()+" list: "+eventList.size());
     }
 
+    
+    public TimeHourMinute computeWorkTime(){
+        long millis;
+        long additionOfMillis=0;
+        int hour = 0;
+        int minute = 0;
+        for(AgendaEvent ae : eventList){
+            millis = ae.getEnd().getTimeInMillis()-
+                    ae.getStart().getTimeInMillis();
+            additionOfMillis += millis;
+            
+        }
+        hour = (int)additionOfMillis / 3600000;
+        minute = (int)additionOfMillis % 60000;
+        TimeHourMinute thm = new TimeHourMinute(hour, minute);
+        if(hour>0||minute>0){
+            System.out.println(this.dateOfDay.getTime()+" THM: "+thm);
+        }
+        return thm;
+    }
+    
     public String getDayNumber() {
         return dayNumber.getText();
     }

@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
+import javax.swing.WindowConstants;
 import tables.Employees;
 
 /**
@@ -26,8 +27,8 @@ public class TestApplet extends javax.swing.JApplet {
     private JCalendar jcalendar;
     private Calendar startCalendar, endCalendar;
     private List <AgendaUser> userList;
-    private List<Employees> empList;
-    private HashMap <String, Employees> empMap;
+    public static List<Employees> empList;
+    public static HashMap <String, Employees> empMap;
     /**
      * Initializes the applet TestApplet
      */
@@ -71,6 +72,7 @@ public class TestApplet extends javax.swing.JApplet {
             java.awt.EventQueue.invokeAndWait(new Runnable() {
                 public void run() {
                     initComponents();
+                    EventUtil.settApp(TestApplet.this);
                     initAgenda();
                 }
             });
@@ -80,6 +82,10 @@ public class TestApplet extends javax.swing.JApplet {
 
     }
 
+    public void reload(){
+        initAgenda();
+    }
+    
     private void initAgenda(){
 //        if(agenda!=null)this.contentPanel.remove(agenda);
         Calendar startTimeElapsed = Calendar.getInstance();
@@ -87,9 +93,11 @@ public class TestApplet extends javax.swing.JApplet {
         endCalendar = endDateChooser.getCalendar();
         if(startCalendar == null){
             startCalendar = Calendar.getInstance();
+            startCalendar.add(Calendar.WEEK_OF_YEAR,-3);
         }
         if(endCalendar == null){
             endCalendar = Calendar.getInstance();
+            endCalendar.add(Calendar.WEEK_OF_YEAR, 4);
         }
         if(empMap == null){
             empMap = new  HashMap();
@@ -165,7 +173,7 @@ public class TestApplet extends javax.swing.JApplet {
         btBuild = new javax.swing.JButton();
         datePanel = new javax.swing.JPanel();
         btCurWeek = new javax.swing.JButton();
-        btCurWeek1 = new javax.swing.JButton();
+        btResetWeek = new javax.swing.JButton();
         startDatePanel = new javax.swing.JPanel();
         lbStartDate = new javax.swing.JLabel();
         startDateChooser = new com.toedter.calendar.JDateChooser();
@@ -179,6 +187,9 @@ public class TestApplet extends javax.swing.JApplet {
         lbUsers = new javax.swing.JLabel();
         contentPanel = new javax.swing.JPanel();
         contentScrollPane = new javax.swing.JScrollPane();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         labelStartDate.setColumns(8);
 
@@ -233,13 +244,13 @@ public class TestApplet extends javax.swing.JApplet {
         });
         datePanel.add(btCurWeek);
 
-        btCurWeek1.setText("Reset");
-        btCurWeek1.addActionListener(new java.awt.event.ActionListener() {
+        btResetWeek.setText("Reset");
+        btResetWeek.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btCurWeek1ActionPerformed(evt);
+                btResetWeekActionPerformed(evt);
             }
         });
-        datePanel.add(btCurWeek1);
+        datePanel.add(btResetWeek);
 
         lbStartDate.setText("from");
         startDatePanel.add(lbStartDate);
@@ -303,6 +314,20 @@ public class TestApplet extends javax.swing.JApplet {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         getContentPane().add(contentPanel, gridBagConstraints);
+
+        jMenu1.setText("File");
+
+        jMenuItem1.setText("jMenuItem1");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
     }// </editor-fold>//GEN-END:initComponents
 
     
@@ -349,29 +374,33 @@ public class TestApplet extends javax.swing.JApplet {
         this.startDateChooser.setCalendar(Calendar.getInstance());
     }//GEN-LAST:event_btCurWeekActionPerformed
 
-    private void btCurWeek1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCurWeek1ActionPerformed
+    private void btResetWeekActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btResetWeekActionPerformed
         this.startDateChooser.setCalendar(null);
         this.endDateChooser.setCalendar(null);
-    }//GEN-LAST:event_btCurWeek1ActionPerformed
+    }//GEN-LAST:event_btResetWeekActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        TablesUI ui = new TablesUI();
+        ui.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        ui.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAllUser;
     private javax.swing.JButton btBuild;
     private javax.swing.JButton btCurWeek;
-    private javax.swing.JButton btCurWeek1;
     private javax.swing.JButton btJCalEnd;
     private javax.swing.JButton btJCalStart;
     private javax.swing.JButton btNoUser;
+    private javax.swing.JButton btResetWeek;
     private javax.swing.JPanel contentPanel;
     private javax.swing.JScrollPane contentScrollPane;
-    private javax.swing.JPanel dateBtPanel;
     private javax.swing.JPanel datePanel;
-    private javax.swing.JPanel employeeBtPanel;
-    private javax.swing.JPanel employeePanel;
     private com.toedter.calendar.JDateChooser endDateChooser;
     private javax.swing.JPanel endDatePanel;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JTextField labelEndDate;
     private javax.swing.JTextField labelStartDate;
     private javax.swing.JLabel lbDates;
@@ -380,7 +409,6 @@ public class TestApplet extends javax.swing.JApplet {
     private javax.swing.JLabel lbUsers;
     private com.toedter.calendar.JDateChooser startDateChooser;
     private javax.swing.JPanel startDatePanel;
-    private javax.swing.JButton todayButton;
     private javax.swing.JPanel topPanel;
     private javax.swing.JPanel userBtPanel;
     private javax.swing.JPanel userPanel;

@@ -10,5 +10,5 @@
   <table-filter match-name="eb_releventempdate"/>
   <table-filter match-name="eb_travelfees"/>
   <table-filter match-name="eb_events"/>
-  <table-filter match-name="eb_city"/>
+  <table-filter match-name="eb_city"/> 
 </hibernate-reverse-engineering>

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 22-juil.-2013 9:26:49 by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="tables.EbEvents" table="eb_events" catalog="eb">
+        <id name="idebEvent" type="java.lang.Integer">
+            <column name="ideb_event" />
+            <generator class="identity" />
+        </id>
+        <property name="ebEventsName" type="string">
+            <column name="eb_eventsName" length="45" />
+        </property>
+        <property name="ebEventsDesc" type="string">
+            <column name="eb_eventsDesc" />
+        </property>
+        <property name="ebEventsStartDate" type="date">
+            <column name="eb_eventsStartDate" length="10" not-null="true" />
+        </property>
+        <property name="ebEventsEndDate" type="date">
+            <column name="eb_eventsEndDate" length="10" />
+        </property>
+        <property name="ebEventsIdCli" type="int">
+            <column name="eb_eventsIdCli" not-null="true" />
+        </property>
+        <set name="ebRelempevents" inverse="true">
+            <key>
+                <column name="eb_relEmpEventEventId" not-null="true" />
+            </key>
+            <one-to-many class="tables.EbRelempevent" />
+        </set>
+        <set name="ebReleventempdates" inverse="true">
+            <key>
+                <column name="eb_relEventEmpDateEventId" not-null="true" />
+            </key>
+            <one-to-many class="tables.EbReleventempdate" />
+        </set>
+    </class>
+</hibernate-mapping>

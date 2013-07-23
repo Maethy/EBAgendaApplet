@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 22-juil.-2013 9:26:49 by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="tables.EbRelempevent" table="eb_relempevent" catalog="eb">
+        <composite-id name="id" class="tables.EbRelempeventId">
+            <key-property name="ebRelEmpEventEventId" type="int">
+                <column name="eb_relEmpEventEventId" />
+            </key-property>
+            <key-property name="ebRelEmpEventEmpId" type="int">
+                <column name="eb_relEmpEventEmpId" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="employees" class="tables.Employees" update="false" insert="false" fetch="select">
+            <column name="eb_relEmpEventEmpId" not-null="true" />
+        </many-to-one>
+        <many-to-one name="ebEvents" class="tables.EbEvents" update="false" insert="false" fetch="select">
+            <column name="eb_relEmpEventEventId" not-null="true" />
+        </many-to-one>
+        <property name="ebRelEmpEventStart" type="time">
+            <column name="eb_relEmpEventStart" length="8" not-null="true" />
+        </property>
+        <property name="ebRelEmpEventEnd" type="time">
+            <column name="eb_relEmpEventEnd" length="8" not-null="true" />
+        </property>
+        <property name="ebRelEmpEventEmpTimeValidation" type="boolean">
+            <column name="eb_relEmpEventEmpTimeValidation" not-null="true" />
+        </property>
+        <property name="ebRelEmpEventAdminTimeValidation" type="boolean">
+            <column name="eb_relEmpEventAdminTimeValidation" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

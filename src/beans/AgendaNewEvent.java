@@ -1,12 +1,47 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this template, choose
+            @Override
+            public void setSelectedItem(Object o) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public Object getSelectedItem() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public int getSize() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public E getElementAt(int i) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void addListDataListener(ListDataListener ll) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void removeListDataListener(ListDataListener ll) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        }Tools | Templates
  * and open the template in the editor.
  */
 package beans;
 
+import business.EventUtil;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import javax.swing.JCheckBox;
+import tables.EbCli;
+import tables.Employees;
+import ui.TestApplet;
 
 /**
  *
@@ -14,36 +49,80 @@ import javax.swing.JCheckBox;
  */
 public class AgendaNewEvent extends javax.swing.JPanel {
     
-    private List<AgendaUser> userList;
     private List<JCheckBox> userCheckBoxes;
+    private List<EbCli> cliList;
     
     /**
      * Creates new form AgendaNewEventPanel
      */
-    public AgendaNewEvent() {
+    public AgendaNewEvent(Calendar date) {
         userCheckBoxes = new ArrayList();
-        initComponents();
-    }
-
-    public AgendaNewEvent(List<AgendaUser> userList) {
-        this.userList = userList;
-        userCheckBoxes = new ArrayList();
-        initComponents();
-        PopulateUsers();
-        System.out.println("created");
+        initComponents();        
+        Calendar start, end;
+        start = Calendar.getInstance();
+        end = Calendar.getInstance();
+        start.setTimeInMillis(date.getTimeInMillis());
+        end.setTimeInMillis(date.getTimeInMillis());
+//        start.set(Calendar.HOUR_OF_DAY, 9);
+        end.set(Calendar.HOUR_OF_DAY, 17);
+        this.startTimeBean.setDateTime(start);
+        this.endTimeBean.setDateTime(end);
+        populateUsers();
     }
     
-    private void PopulateUsers(){
-        System.out.println(userList.size());
-        for(AgendaUser user : userList){
+    private void populateUsers(){
+        for(Employees emp : TestApplet.empList){
             JCheckBox ckb = new JCheckBox();
-            ckb.setText(user.getUserName());
+            ckb.setText(emp.getInitiales());
             userCheckBoxes.add(ckb);
         }
-        System.out.println(userCheckBoxes.size());
         for(JCheckBox ckb : userCheckBoxes){
             this.userPanel.add(ckb);
         }
+    }
+
+    public Calendar getStartTime() {
+        System.out.println(startTimeBean.getDateTime().getTime());
+        return startTimeBean.getDateTime();
+    }
+
+    public Calendar getEndTime() {
+        return endTimeBean.getDateTime();
+    }
+    
+    public EbCli getClient() {
+        return (EbCli)jComboBox1.getSelectedItem();
+    }
+    
+    public String getEventName(){
+        return fieldEventName.getText();
+    }
+    
+    public String getEventDesc(){
+        return txtEventDesc.getText();
+    }
+    
+    public Employees[] getEmployees(){
+        List <Employees> participants = new ArrayList();
+        for(Object o : userPanel.getComponents()){
+            if(o instanceof JCheckBox){
+                JCheckBox ckb = (JCheckBox)o;
+                String initiales = ckb.getText();
+                if(ckb.isSelected()){
+                    if(TestApplet.empMap.containsKey(initiales)){
+                        Employees emp = TestApplet.empMap.get(initiales);
+                        participants.add(emp);
+                    }
+                }
+            }
+        }
+        System.out.println(participants.size()+" participants");
+        return participants.toArray(new Employees[0]);
+    }
+    
+    private Object[] populateClients(){
+        cliList = EventUtil.getClients();
+        return cliList.toArray();
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -58,16 +137,18 @@ public class AgendaNewEvent extends javax.swing.JPanel {
         title = new javax.swing.JLabel();
         contentPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        fieldEventName = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        dateTimeBean3 = new beans.DateTimeBean();
+        startTimeBean = new beans.DateTimeBean();
         jLabel3 = new javax.swing.JLabel();
-        dateTimeBean4 = new beans.DateTimeBean();
+        endTimeBean = new beans.DateTimeBean();
         jLabel5 = new javax.swing.JLabel();
         userPanel = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtEventDesc = new javax.swing.JTextArea();
+        jComboBox1 = new javax.swing.JComboBox();
         buttonPanel = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -85,13 +166,13 @@ public class AgendaNewEvent extends javax.swing.JPanel {
         gridBagConstraints.gridy = 0;
         contentPanel.add(jLabel1, gridBagConstraints);
 
-        jTextField1.setText("jTextField1");
+        fieldEventName.setText("jTextField1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        contentPanel.add(jTextField1, gridBagConstraints);
+        contentPanel.add(fieldEventName, gridBagConstraints);
 
         jLabel2.setText("De");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -102,7 +183,7 @@ public class AgendaNewEvent extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 1;
         gridBagConstraints.weightx = 1.0;
-        contentPanel.add(dateTimeBean3, gridBagConstraints);
+        contentPanel.add(startTimeBean, gridBagConstraints);
 
         jLabel3.setText("à");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -112,30 +193,41 @@ public class AgendaNewEvent extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 1;
         gridBagConstraints.weightx = 1.0;
-        contentPanel.add(dateTimeBean4, gridBagConstraints);
+        contentPanel.add(endTimeBean, gridBagConstraints);
 
         jLabel5.setText("Participants");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         contentPanel.add(jLabel5, gridBagConstraints);
 
         userPanel.setLayout(new java.awt.GridLayout(0, 8));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         contentPanel.add(userPanel, gridBagConstraints);
+
+        jLabel6.setText("Client");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.weightx = 1.0;
+        contentPanel.add(jLabel6, gridBagConstraints);
 
         jLabel4.setText("Description");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         contentPanel.add(jLabel4, gridBagConstraints);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        txtEventDesc.setColumns(20);
+        txtEventDesc.setRows(5);
+        jScrollPane1.setViewportView(txtEventDesc);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         contentPanel.add(jScrollPane1, gridBagConstraints);
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(populateClients()));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 2;
+        contentPanel.add(jComboBox1, gridBagConstraints);
 
         add(contentPanel, java.awt.BorderLayout.CENTER);
 
@@ -170,19 +262,21 @@ public class AgendaNewEvent extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JPanel contentPanel;
-    private beans.DateTimeBean dateTimeBean3;
-    private beans.DateTimeBean dateTimeBean4;
+    private beans.DateTimeBean endTimeBean;
+    private javax.swing.JTextField fieldEventName;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
+    private beans.DateTimeBean startTimeBean;
     private javax.swing.JLabel title;
+    private javax.swing.JTextArea txtEventDesc;
     private javax.swing.JPanel userPanel;
     // End of variables declaration//GEN-END:variables
 }

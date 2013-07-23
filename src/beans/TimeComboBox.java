@@ -33,11 +33,6 @@ public class TimeComboBox extends JComboBox {
         setModel(new javax.swing.DefaultComboBoxModel(newModel()));
         setMinimumSize(new java.awt.Dimension(80, 22));
         setPreferredSize(new java.awt.Dimension(80, 22));
-        addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                formActionPerformed(evt);
-            }
-        });
     }// </editor-fold>//GEN-END:initComponents
     private TimeHourMinute[] newModel(){
        TimeHourMinute[] thmArray;
@@ -50,10 +45,6 @@ public class TimeComboBox extends JComboBox {
        }
        return thmArray;
 }
-    private void formActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_formActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }

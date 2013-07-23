@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
 import java.util.Calendar;
+import java.util.Locale;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -24,7 +25,7 @@ public class AgendaEvent extends JButton{
     private String summary;
     private String description;
     private JLabel title;
-    private Date start, end;
+    private Calendar start, end;
     private int id;
     
     private boolean isWholeDayEvent;
@@ -41,7 +42,7 @@ public class AgendaEvent extends JButton{
         this.dateOfEvent = parent.getDateOfDay();
         id = this.hashCode();
 //        System.out.println("hash from parentday "+this.parentDay.hashCode()+" / "+parent.hashCode());
-        title = new JLabel(this.summary);//+" "+this.hashCode()+" "+this.parentDay.hashCode());
+        title = new JLabel(this.dateOfEvent.get(Calendar.DAY_OF_MONTH)+" "+this.summary);//+" "+this.hashCode()+" "+this.parentDay.hashCode());
         setBackground(parentDay.getBackground());
         add(title);
         
@@ -65,13 +66,23 @@ public class AgendaEvent extends JButton{
             }
         });
     }
-     public AgendaEvent(AgendaDay parent, String summary, int id, Date start, Date end) {
+     public AgendaEvent(AgendaDay parent, String summary, int id, Calendar start, Calendar end) {
         this.summary = summary;
         this.parentDay = parent;
         this.dateOfEvent = parent.getDateOfDay();
         this.id = id;
+        this.start = Calendar.getInstance();
+        this.end = Calendar.getInstance();
+        this.start.setTime(start.getTime());
+        this.end.setTime(end.getTime());
 //        System.out.println("hash from parentday "+this.parentDay.hashCode()+" / "+parent.hashCode());
-        title = new JLabel(this.summary+" "+start+" to "+end);//+" "+this.hashCode()+" "+this.parentDay.hashCode());
+        title = new JLabel("<html><body>"
+                +this.dateOfEvent.get(Calendar.DAY_OF_MONTH)
+                +" "+this.summary+"<br>from "
+                +this.start.get(Calendar.HOUR_OF_DAY)+":"+this.start.get(Calendar.MINUTE)
+                +"<br> to "+this.end.get(Calendar.HOUR_OF_DAY)+":"
+                +this.end.get(Calendar.MINUTE)+"</body></html>");
+        this.setContentAreaFilled(false);
         setBackground(parentDay.getBackground());
         add(title);
         
@@ -105,11 +116,23 @@ public class AgendaEvent extends JButton{
         }
         
         this.id = a.id;
-        
+        this.start = a.start;
+        this.end = a.end;
         this.isWholeDayEvent = a.isWholeDayEvent;
         this.parentDay = a.parentDay;
         this.summary = String.copyValueOf(a.summary.toCharArray());
         this.title = new JLabel(a.title.getText());
+        this.setContentAreaFilled(false);
+        setBackground(parentDay.getBackground());
+        add(title);
+
+        this.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(AgendaEvent.this, AgendaEvent.this.summary+" "+AgendaEvent.this.id);
+            }
+        });
 
         
     }
@@ -126,6 +149,22 @@ public class AgendaEvent extends JButton{
 
     public void setParentDay(AgendaDay parentDay) {
         this.parentDay = parentDay;
+    }
+
+    public Calendar getStart() {
+        return start;
+    }
+
+    public void setStart(Calendar start) {
+        this.start = start;
+    }
+
+    public Calendar getEnd() {
+        return end;
+    }
+
+    public void setEnd(Calendar end) {
+        this.end = end;
     }
 
     

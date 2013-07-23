@@ -4,6 +4,7 @@
  */
 package business;
 
+import beans.AgendaDay;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -13,9 +14,11 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
+import tables.EbCli;
 import tables.EbEvents;
 import tables.EbReleventempdate;
 import tables.Employees;
+import ui.TestApplet;
 import util.HibernateUtil;
 
 /**
@@ -25,6 +28,7 @@ import util.HibernateUtil;
 public class EventUtil {
     private static Session session;
     private static Transaction transaction;
+    private static TestApplet tApp;
     
     public static void openSession(){
         session = HibernateUtil.getSessionFactory().openSession();
@@ -37,8 +41,6 @@ public class EventUtil {
         java.util.Date from, to;
         from = fromCal.getTime();
         to = toCal.getTime();
-        System.out.println(from);
-        System.out.println(to);
         List <EbEvents> rs = new ArrayList();
         Criterion betweenDate = Restrictions.and(Restrictions.le("ebEventsStartDate", to),Restrictions.ge("ebEventsEndDate", from));
         Criteria criteria = session.createCriteria(EbEvents.class);
@@ -48,7 +50,21 @@ public class EventUtil {
         return rs;
     }
     
-    public static EbReleventempdate getEventUser(int eventId, int employeeId){
+    public static List<EbCli> getClients(){
+        return session.createCriteria(EbCli.class).list();
+    }
+
+    public static TestApplet gettApp() {
+        return tApp;
+    }
+
+    public static void settApp(TestApplet tApp) {
+        EventUtil.tApp = tApp;
+    }
+    
+    
+    
+    public static List<EbReleventempdate> getEventUser(int eventId, int employeeId){
         String query = "Select * from eb.eb_releventempdate as a where"
                 + " a.eb_relEventEmpDateEventId ="+eventId+
                 " AND a.eb_relEventEmpDateEmployee ="+ employeeId;
@@ -69,7 +85,62 @@ public class EventUtil {
 //                session.createCriteria(EbReleventempdate.class)
 //                .add(Restrictions.idEq(id)).uniqueResult();
 //        System.out.println(eventEmpDate);
-        return (EbReleventempdate)myQuery.uniqueResult();
+        return (List<EbReleventempdate>)myQuery.list();
+    }
+    public static EbEvents addEvent(String eventName, String eventDesc, 
+            Calendar eventDate, Calendar endDate, int idCli, Employees[] participants){
+        EbEvents newEvent;
+        int cpt=0;
+        newEvent = new EbEvents(eventDate.getTime(), idCli);
+        if(endDate!=null){
+            newEvent.setEbEventsEndDate(endDate.getTime());
+        }
+        if(eventName!=null){
+            newEvent.setEbEventsName(eventName);
+        }
+        if(eventDesc!=null){
+            newEvent.setEbEventsDesc(eventDesc);
+        }
+        
+        session.beginTransaction();
+        session.saveOrUpdate(newEvent);
+        session.getTransaction().commit();
+        for(Employees currentEmployee : participants){
+            Calendar startTime, endTime;
+            startTime = Calendar.getInstance();
+            startTime.setTimeInMillis(eventDate.getTimeInMillis());
+            endTime = Calendar.getInstance();
+            endTime.setTimeInMillis(endDate.getTimeInMillis());
+            endTime.set(Calendar.DAY_OF_YEAR, 
+                    startTime.get(Calendar.DAY_OF_YEAR));
+            
+            while(startTime.get(Calendar.DAY_OF_YEAR)<=endDate.get(Calendar.DAY_OF_YEAR)){
+                addRelempeventdate(newEvent, currentEmployee, startTime, endTime, eventDesc);
+                startTime.add(Calendar.DAY_OF_YEAR, 1);
+                endTime.add(Calendar.DAY_OF_YEAR, 1);
+                cpt++;
+            }
+            //addRelempeventdate(newEvent, currentEmployee, startTime, endTime, eventDesc);
+
+            
+        }
+        System.out.println(cpt+ "rows inserted");
+        return newEvent;
+    }
+    
+    public static int addRelempeventdate(EbEvents event, Employees employee, 
+            Calendar start, Calendar end, String desc){
+        EbReleventempdate eventEmpDate = new EbReleventempdate(); 
+        eventEmpDate.setEbEvents(event);
+        eventEmpDate.setEmployees(employee);
+        eventEmpDate.setEbRelEventEmpDateStart(start.getTime());
+        eventEmpDate.setEbRelEventEmpDateEnd(end.getTime());
+        eventEmpDate.setEbRelEventEmpDateJobDesc(desc);
+        session.beginTransaction();
+        session.saveOrUpdate(eventEmpDate);
+        session.getTransaction().commit();
+        return eventEmpDate.getIdebRelEventEmpDate();
+        
     }
     
     public static List<EbEvents> preciseEventList(Calendar fromCal, Calendar toCal, List<EbEvents> list){
@@ -87,7 +158,7 @@ public class EventUtil {
     
     public static List<Employees> getEmployeeList(){
         Criteria criteria = session.createCriteria(Employees.class);
-        criteria.add(Restrictions.eq("disableEmpl", 0));
+        criteria.add(Restrictions.eq("disableEmpl", false));
         return criteria.list();
     }
 }

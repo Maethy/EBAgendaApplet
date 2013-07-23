@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 22-juil.-2013 9:26:49 by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="tables.EbReleventempdate" table="eb_releventempdate" catalog="eb">
+        <id name="idebRelEventEmpDate" type="java.lang.Integer">
+            <column name="ideb_relEventEmpDate" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="employees" class="tables.Employees" fetch="select">
+            <column name="eb_relEventEmpDateEmployee" not-null="true" />
+        </many-to-one>
+        <many-to-one name="ebEvents" class="tables.EbEvents" fetch="select">
+            <column name="eb_relEventEmpDateEventId" not-null="true" />
+        </many-to-one>
+        <property name="ebRelEventEmpDateStart" type="timestamp">
+            <column name="eb_relEventEmpDateStart" length="19" not-null="true" />
+        </property>
+        <property name="ebRelEventEmpDateEnd" type="timestamp">
+            <column name="eb_relEventEmpDateEnd" length="19" not-null="true" />
+        </property>
+        <property name="ebRelEventEmpDateTrajet" type="timestamp">
+            <column name="eb_relEventEmpDateTrajet" length="19" />
+        </property>
+        <property name="ebRelEventEmpDateLunch" type="timestamp">
+            <column name="eb_relEventEmpDateLunch" length="19" />
+        </property>
+        <property name="ebRelEventEmpDateJobDesc" type="string">
+            <column name="eb_relEventEmpDateJobDesc" />
+        </property>
+        <property name="ebRelEventEmpDateUserTimeValid" type="java.lang.Boolean">
+            <column name="eb_relEventEmpDateUserTimeValid" />
+        </property>
+        <property name="ebRelEventEmpDateAdminTimeValid" type="java.lang.Boolean">
+            <column name="eb_relEventEmpDateAdminTimeValid" />
+        </property>
+    </class>
+</hibernate-mapping>
