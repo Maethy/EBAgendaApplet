@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 22-juil.-2013 9:26:49 by Hibernate Tools 3.2.1.GA -->
+<!-- Generated 23 juil. 2013 18:33:27 by Hibernate Tools 3.2.1.GA -->
 <hibernate-mapping>
     <class name="tables.EbRelempevent" table="eb_relempevent" catalog="eb">
         <composite-id name="id" class="tables.EbRelempeventId">

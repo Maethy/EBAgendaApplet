@@ -1,13 +1,16 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 22-juil.-2013 9:26:49 by Hibernate Tools 3.2.1.GA -->
+<!-- Generated 23 juil. 2013 18:33:27 by Hibernate Tools 3.2.1.GA -->
 <hibernate-mapping>
     <class name="tables.EbEvents" table="eb_events" catalog="eb">
         <id name="idebEvent" type="java.lang.Integer">
             <column name="ideb_event" />
             <generator class="identity" />
         </id>
+        <many-to-one name="employees" class="tables.Employees" fetch="select">
+            <column name="eb_eventsCreator" />
+        </many-to-one>
         <property name="ebEventsName" type="string">
             <column name="eb_eventsName" length="45" />
         </property>

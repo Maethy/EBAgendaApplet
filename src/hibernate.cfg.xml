@@ -18,5 +18,6 @@
     <mapping resource="tables/EbEvents.hbm.xml"/>
     <mapping resource="tables/EbTravelfees.hbm.xml"/>
     <mapping resource="tables/Employees.hbm.xml"/>
+    <mapping resource="tables/EbWorktimetable.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>

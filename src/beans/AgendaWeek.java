@@ -83,6 +83,7 @@ public class AgendaWeek extends javax.swing.JPanel {
                 AgendaDay aDay;
                 Calendar newCal = Calendar.getInstance();
                 newCal.setTimeInMillis(dateOfDay.getTimeInMillis());
+                System.out.println(dateOfDay.getTime()+" "+preciseList.size());
                 if(preciseList.isEmpty()){
                     aDay = new AgendaDay(this, newCal,userList.get(j));
                 }else{

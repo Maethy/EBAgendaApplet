@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 22-juil.-2013 9:26:49 by Hibernate Tools 3.2.1.GA -->
+<!-- Generated 23 juil. 2013 18:33:27 by Hibernate Tools 3.2.1.GA -->
 <hibernate-mapping>
     <class name="tables.Employees" table="employees" catalog="eb">
         <id name="id" type="java.lang.Integer">
@@ -46,6 +46,18 @@
                 <column name="eb_relEventEmpDateEmployee" not-null="true" />
             </key>
             <one-to-many class="tables.EbReleventempdate" />
+        </set>
+        <set name="ebEventses" inverse="true">
+            <key>
+                <column name="eb_eventsCreator" />
+            </key>
+            <one-to-many class="tables.EbEvents" />
+        </set>
+        <set name="ebWorktimetables" inverse="true">
+            <key>
+                <column name="eb_workTimeTableEmp" not-null="true" />
+            </key>
+            <one-to-many class="tables.EbWorktimetable" />
         </set>
         <set name="ebRelempevents" inverse="true">
             <key>

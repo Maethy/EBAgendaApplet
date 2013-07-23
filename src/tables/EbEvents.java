@@ -1,5 +1,5 @@
 package tables;
-// Generated 22-juil.-2013 9:26:48 by Hibernate Tools 3.2.1.GA
+// Generated 23 juil. 2013 18:33:26 by Hibernate Tools 3.2.1.GA
 
 
 import java.util.Date;
@@ -13,6 +13,7 @@ public class EbEvents  implements java.io.Serializable {
 
 
      private Integer idebEvent;
+     private Employees employees;
      private String ebEventsName;
      private String ebEventsDesc;
      private Date ebEventsStartDate;
@@ -29,7 +30,8 @@ public class EbEvents  implements java.io.Serializable {
         this.ebEventsStartDate = ebEventsStartDate;
         this.ebEventsIdCli = ebEventsIdCli;
     }
-    public EbEvents(String ebEventsName, String ebEventsDesc, Date ebEventsStartDate, Date ebEventsEndDate, int ebEventsIdCli, Set ebRelempevents, Set ebReleventempdates) {
+    public EbEvents(Employees employees, String ebEventsName, String ebEventsDesc, Date ebEventsStartDate, Date ebEventsEndDate, int ebEventsIdCli, Set ebRelempevents, Set ebReleventempdates) {
+       this.employees = employees;
        this.ebEventsName = ebEventsName;
        this.ebEventsDesc = ebEventsDesc;
        this.ebEventsStartDate = ebEventsStartDate;
@@ -45,6 +47,13 @@ public class EbEvents  implements java.io.Serializable {
     
     public void setIdebEvent(Integer idebEvent) {
         this.idebEvent = idebEvent;
+    }
+    public Employees getEmployees() {
+        return this.employees;
+    }
+    
+    public void setEmployees(Employees employees) {
+        this.employees = employees;
     }
     public String getEbEventsName() {
         return this.ebEventsName;

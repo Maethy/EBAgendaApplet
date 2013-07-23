@@ -1,5 +1,5 @@
 package tables;
-// Generated 22-juil.-2013 9:26:48 by Hibernate Tools 3.2.1.GA
+// Generated 23 juil. 2013 18:33:26 by Hibernate Tools 3.2.1.GA
 
 
 import java.util.HashSet;
@@ -24,6 +24,8 @@ public class Employees  implements java.io.Serializable {
      private String pass;
      private boolean disableEmpl;
      private Set ebReleventempdates = new HashSet(0);
+     private Set ebEventses = new HashSet(0);
+     private Set ebWorktimetables = new HashSet(0);
      private Set ebRelempevents = new HashSet(0);
 
     public Employees() {
@@ -38,7 +40,7 @@ public class Employees  implements java.io.Serializable {
         this.pass = pass;
         this.disableEmpl = disableEmpl;
     }
-    public Employees(int idEmpl, String fullName, String initiales, String fonction, String telephone, String mail, String mail2, String skype, String login, String pass, boolean disableEmpl, Set ebReleventempdates, Set ebRelempevents) {
+    public Employees(int idEmpl, String fullName, String initiales, String fonction, String telephone, String mail, String mail2, String skype, String login, String pass, boolean disableEmpl, Set ebReleventempdates, Set ebEventses, Set ebWorktimetables, Set ebRelempevents) {
        this.idEmpl = idEmpl;
        this.fullName = fullName;
        this.initiales = initiales;
@@ -51,6 +53,8 @@ public class Employees  implements java.io.Serializable {
        this.pass = pass;
        this.disableEmpl = disableEmpl;
        this.ebReleventempdates = ebReleventempdates;
+       this.ebEventses = ebEventses;
+       this.ebWorktimetables = ebWorktimetables;
        this.ebRelempevents = ebRelempevents;
     }
    
@@ -144,6 +148,20 @@ public class Employees  implements java.io.Serializable {
     
     public void setEbReleventempdates(Set ebReleventempdates) {
         this.ebReleventempdates = ebReleventempdates;
+    }
+    public Set getEbEventses() {
+        return this.ebEventses;
+    }
+    
+    public void setEbEventses(Set ebEventses) {
+        this.ebEventses = ebEventses;
+    }
+    public Set getEbWorktimetables() {
+        return this.ebWorktimetables;
+    }
+    
+    public void setEbWorktimetables(Set ebWorktimetables) {
+        this.ebWorktimetables = ebWorktimetables;
     }
     public Set getEbRelempevents() {
         return this.ebRelempevents;

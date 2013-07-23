@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 23 juil. 2013 18:33:27 by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="tables.EbWorktimetable" table="eb_worktimetable" catalog="eb">
+        <id name="idworkTimeTable" type="java.lang.Integer">
+            <column name="idworkTimeTable" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="employees" class="tables.Employees" fetch="select">
+            <column name="eb_workTimeTableEmp" not-null="true" />
+        </many-to-one>
+        <property name="ebWorkTimeTableDate" type="date">
+            <column name="eb_workTimeTableDate" length="10" not-null="true" />
+        </property>
+        <property name="ebWorkTimeTableNbHours" type="int">
+            <column name="eb_workTimeTableNbHours" not-null="true" />
+        </property>
+        <property name="ebWorkTimeTableAdminValidation" type="boolean">
+            <column name="eb_workTimeTableAdminValidation" not-null="true" />
+        </property>
+        <property name="ebWorkTimeTableNbMin" type="int">
+            <column name="eb_workTimeTableNbMin" not-null="true" />
+        </property>
+        <property name="ebWorkTimeTableUserValidation" type="boolean">
+            <column name="eb_workTimeTableUserValidation" not-null="true" />
+        </property>
+        <property name="ebWorkTimeTableWeekYear" type="date">
+            <column name="eb_workTimeTableWeekYear" length="10" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -4,7 +4,6 @@
  */
 package business;
 
-import beans.AgendaDay;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -140,6 +139,10 @@ public class EventUtil {
         session.saveOrUpdate(eventEmpDate);
         session.getTransaction().commit();
         return eventEmpDate.getIdebRelEventEmpDate();
+        
+    }
+    
+    public static void modRelempeventdate(){
         
     }
     
