@@ -45,10 +45,24 @@ public class TimeHourMinute {
     }
     
     public TimeHourMinute addTHM(TimeHourMinute thm){
-        int newHour = 0;
-        int newMinute = 0;
-        newHour = this.hour + thm.hour + (this.minute + thm.minute)/60;
-        newMinute = (this.minute + thm.minute)%60;
+//        int newHour = 0;
+//        int newMinute = 0;
+//        newHour = this.hour + thm.hour + (this.minute + thm.minute)/60;
+//        newMinute = (this.minute + thm.minute)%60;
+        int oldMinute = hour*60 + minute;
+        int newMinute = thm.hour*60 + thm.minute;
+        int resultMinute = oldMinute + newMinute;
+        int newHour = resultMinute/60;
+        newMinute = resultMinute %60;
+        return new TimeHourMinute(newHour, newMinute);
+    }
+    
+    public TimeHourMinute subTHM(TimeHourMinute thm){
+        int oldMinute = hour*60 + minute;
+        int newMinute = thm.hour*60 + thm.minute;
+        int resultMinute = oldMinute - newMinute;
+        int newHour = resultMinute/60;
+        newMinute = resultMinute %60;
         return new TimeHourMinute(newHour, newMinute);
     }
 

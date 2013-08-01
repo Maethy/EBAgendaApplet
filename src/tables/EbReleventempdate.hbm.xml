@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 23 juil. 2013 18:33:27 by Hibernate Tools 3.2.1.GA -->
+<!-- Generated 31-juil.-2013 17:30:28 by Hibernate Tools 3.2.1.GA -->
 <hibernate-mapping>
-    <class name="tables.EbReleventempdate" table="eb_releventempdate" catalog="eb">
+    <class name="tables.EbReleventempdate" table="eb_releventempdate" catalog="ebjava">
         <id name="idebRelEventEmpDate" type="java.lang.Integer">
             <column name="ideb_relEventEmpDate" />
             <generator class="identity" />
@@ -20,20 +20,26 @@
         <property name="ebRelEventEmpDateEnd" type="timestamp">
             <column name="eb_relEventEmpDateEnd" length="19" not-null="true" />
         </property>
-        <property name="ebRelEventEmpDateTrajet" type="timestamp">
-            <column name="eb_relEventEmpDateTrajet" length="19" />
+        <property name="ebRelEventEmpDateDate" type="date">
+            <column name="eb_relEventEmpDateDate" length="10" />
         </property>
-        <property name="ebRelEventEmpDateLunch" type="timestamp">
-            <column name="eb_relEventEmpDateLunch" length="19" />
+        <property name="ebRelEventEmpDateTrajetMinute" type="java.lang.Integer">
+            <column name="eb_relEventEmpDateTrajetMinute" />
+        </property>
+        <property name="ebRelEventEmpDateLunchMinutes" type="java.lang.Integer">
+            <column name="eb_relEventEmpDateLunchMinutes" />
         </property>
         <property name="ebRelEventEmpDateJobDesc" type="string">
             <column name="eb_relEventEmpDateJobDesc" />
         </property>
-        <property name="ebRelEventEmpDateUserTimeValid" type="java.lang.Boolean">
-            <column name="eb_relEventEmpDateUserTimeValid" />
+        <property name="ebRelEventEmpDateUserTimeValid" type="boolean">
+            <column name="eb_relEventEmpDateUserTimeValid" not-null="true" />
         </property>
-        <property name="ebRelEventEmpDateAdminTimeValid" type="java.lang.Boolean">
-            <column name="eb_relEventEmpDateAdminTimeValid" />
+        <property name="ebRelEventEmpDateAdminTimeValid" type="boolean">
+            <column name="eb_relEventEmpDateAdminTimeValid" not-null="true" />
+        </property>
+        <property name="ebRelEventEmpDateFullDay" type="boolean">
+            <column name="eb_relEventEmpDateFullDay" not-null="true" />
         </property>
     </class>
 </hibernate-mapping>

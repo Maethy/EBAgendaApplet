@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 23 juil. 2013 18:33:27 by Hibernate Tools 3.2.1.GA -->
+<!-- Generated 31-juil.-2013 17:30:28 by Hibernate Tools 3.2.1.GA -->
 <hibernate-mapping>
-    <class name="tables.EbEvents" table="eb_events" catalog="eb">
+    <class name="tables.EbEvents" table="eb_events" catalog="ebjava">
         <id name="idebEvent" type="java.lang.Integer">
             <column name="ideb_event" />
             <generator class="identity" />
@@ -26,12 +26,6 @@
         <property name="ebEventsIdCli" type="int">
             <column name="eb_eventsIdCli" not-null="true" />
         </property>
-        <set name="ebRelempevents" inverse="true">
-            <key>
-                <column name="eb_relEmpEventEventId" not-null="true" />
-            </key>
-            <one-to-many class="tables.EbRelempevent" />
-        </set>
         <set name="ebReleventempdates" inverse="true">
             <key>
                 <column name="eb_relEventEmpDateEventId" not-null="true" />

@@ -7,6 +7,7 @@ package beans;
 import business.EventUtil;
 import com.toedter.calendar.JCalendar;
 import java.awt.Component;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import javax.swing.JLabel;
@@ -21,11 +22,11 @@ import tables.EbEvents;
 public class AgendaPanel extends JPanel {
     private javax.swing.JLabel title;    
     private List<AgendaWeek> weekList;
-    private List<AgendaUser> userList;
+    private List<AgendaUser> userList, oldList;
     private JCalendar jcalendar;
     private Calendar startCalendar;
     private Calendar endCalendar;
-    
+    private Calendar newStart, newEnd;
     
     public AgendaPanel(){
         this.setSize(800, 480);
@@ -37,18 +38,71 @@ public class AgendaPanel extends JPanel {
     public AgendaPanel(Calendar startCalendar, Calendar endCalendar, 
             List<AgendaUser> userList){    
         this.userList = userList;
+        this.oldList = new ArrayList();
+        this.oldList.addAll(userList);
         this.setSize(800, 480);
         this.startCalendar = Calendar.getInstance();
         this.endCalendar = endCalendar;
         this.startCalendar.setTime(startCalendar.getTime());
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.PAGE_AXIS));
+        
         initComponents();
     }
+    
+    public void ReloadAgendaPanel(Calendar startCalendar, Calendar endCalendar){
+//        System.out.println(this.startCalendar.get(Calendar.DAY_OF_MONTH)+" "+startCalendar.get(Calendar.DAY_OF_MONTH));
+//        System.out.println(this.endCalendar.get(Calendar.DAY_OF_MONTH)+" "+endCalendar.get(Calendar.DAY_OF_MONTH));
+        int currentDay = startCalendar.get((Calendar.DAY_OF_WEEK)-1)%7;
+        int lastCurrentDay = endCalendar.get((Calendar.DAY_OF_WEEK)-1)%7;
+        newStart = Calendar.getInstance();
+        newEnd = Calendar.getInstance();
+        newStart.setTime(startCalendar.getTime());
+        newEnd.setTime(endCalendar.getTime());
+        newStart.add(Calendar.DAY_OF_YEAR, -currentDay);
+        newEnd.add(Calendar.DAY_OF_YEAR, 6-lastCurrentDay);
+        if(this.startCalendar.get(Calendar.DAY_OF_MONTH)==
+                startCalendar.get(Calendar.DAY_OF_MONTH)&&
+                this.startCalendar.get(Calendar.MONTH)==
+                startCalendar.get(Calendar.MONTH)&&
+                        this.startCalendar.get(Calendar.YEAR)==
+                startCalendar.get(Calendar.YEAR)&&
+                this.endCalendar.get(Calendar.DAY_OF_MONTH)==
+                endCalendar.get(Calendar.DAY_OF_MONTH)&&
+                this.endCalendar.get(Calendar.MONTH)==
+                endCalendar.get(Calendar.MONTH)&&
+                        this.endCalendar.get(Calendar.YEAR)==
+                endCalendar.get(Calendar.YEAR)&& 
+                this.oldList.equals(this.userList)){
+            List<EbEvents> rs = EventUtil.fetchEventFromTo(newStart, newEnd);
+            for(Component comp : this.getComponents()){
+                if(comp instanceof AgendaWeek){
+                    AgendaWeek week = (AgendaWeek) comp;
+                    week.reloadWeek(rs);
+                }
+            }
+            
+        }else{
+            this.oldList=new ArrayList();
+            this.oldList.addAll(userList);       
+            this.setSize(800, 480);
+            this.startCalendar = Calendar.getInstance();
+            this.endCalendar = endCalendar;
+            this.startCalendar.setTime(startCalendar.getTime());
+            setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.PAGE_AXIS));
 
+            initComponents();
+        }
+    }
+
+    
     private void initComponents(){
+        removeAll();
+
+        
         title = new JLabel("EuroBrevets Agenda");  
         add(title);
         add(new JSeparator());
+        
         int nbWeeks = 4;
         int nbYears = 1;
         if(endCalendar != null){
@@ -66,14 +120,17 @@ public class AgendaPanel extends JPanel {
         int currentDay = startCalendar.get((Calendar.DAY_OF_WEEK)-1)%7;
         int lastCurrentDay = endCalendar.get((Calendar.DAY_OF_WEEK)-1)%7;
 //        currentDay--;
-        startCalendar.add(Calendar.DAY_OF_YEAR, -currentDay);
-        endCalendar.add(Calendar.DAY_OF_YEAR, 6-lastCurrentDay);
-        EventUtil.openSession();
-        List<EbEvents> rs = EventUtil.fetchEventFromTo(startCalendar, endCalendar);
+        newStart = Calendar.getInstance();
+        newEnd = Calendar.getInstance();
+        newStart.setTime(startCalendar.getTime());
+        newEnd.setTime(endCalendar.getTime());
+        newStart.add(Calendar.DAY_OF_YEAR, -currentDay);
+        newEnd.add(Calendar.DAY_OF_YEAR, 6-lastCurrentDay);
+        List<EbEvents> rs = EventUtil.fetchEventFromTo(newStart, newEnd);
 
         for(int i=0; i<nbWeeks;i++){
-            add(new AgendaWeek(this, startCalendar, rs, userList));
-            startCalendar.add(Calendar.WEEK_OF_YEAR, 1);
+            add(new AgendaWeek(this, newStart, rs, userList));
+            newStart.add(Calendar.WEEK_OF_YEAR, 1);
             add(new JSeparator());           
         }
         revalidate();

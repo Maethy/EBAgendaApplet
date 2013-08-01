@@ -1,5 +1,5 @@
 package tables;
-// Generated 23 juil. 2013 18:33:26 by Hibernate Tools 3.2.1.GA
+// Generated 31-juil.-2013 17:30:28 by Hibernate Tools 3.2.1.GA
 
 
 import java.util.Date;
@@ -15,32 +15,39 @@ public class EbReleventempdate  implements java.io.Serializable {
      private EbEvents ebEvents;
      private Date ebRelEventEmpDateStart;
      private Date ebRelEventEmpDateEnd;
-     private Date ebRelEventEmpDateTrajet;
-     private Date ebRelEventEmpDateLunch;
+     private Date ebRelEventEmpDateDate;
+     private Integer ebRelEventEmpDateTrajetMinute;
+     private Integer ebRelEventEmpDateLunchMinutes;
      private String ebRelEventEmpDateJobDesc;
-     private Boolean ebRelEventEmpDateUserTimeValid;
-     private Boolean ebRelEventEmpDateAdminTimeValid;
+     private boolean ebRelEventEmpDateUserTimeValid;
+     private boolean ebRelEventEmpDateAdminTimeValid;
+     private boolean ebRelEventEmpDateFullDay;
 
     public EbReleventempdate() {
     }
 
 	
-    public EbReleventempdate(Employees employees, EbEvents ebEvents, Date ebRelEventEmpDateStart, Date ebRelEventEmpDateEnd) {
+    public EbReleventempdate(Employees employees, EbEvents ebEvents, Date ebRelEventEmpDateStart, Date ebRelEventEmpDateEnd, boolean ebRelEventEmpDateUserTimeValid, boolean ebRelEventEmpDateAdminTimeValid, boolean ebRelEventEmpDateFullDay) {
         this.employees = employees;
         this.ebEvents = ebEvents;
         this.ebRelEventEmpDateStart = ebRelEventEmpDateStart;
         this.ebRelEventEmpDateEnd = ebRelEventEmpDateEnd;
+        this.ebRelEventEmpDateUserTimeValid = ebRelEventEmpDateUserTimeValid;
+        this.ebRelEventEmpDateAdminTimeValid = ebRelEventEmpDateAdminTimeValid;
+        this.ebRelEventEmpDateFullDay = ebRelEventEmpDateFullDay;
     }
-    public EbReleventempdate(Employees employees, EbEvents ebEvents, Date ebRelEventEmpDateStart, Date ebRelEventEmpDateEnd, Date ebRelEventEmpDateTrajet, Date ebRelEventEmpDateLunch, String ebRelEventEmpDateJobDesc, Boolean ebRelEventEmpDateUserTimeValid, Boolean ebRelEventEmpDateAdminTimeValid) {
+    public EbReleventempdate(Employees employees, EbEvents ebEvents, Date ebRelEventEmpDateStart, Date ebRelEventEmpDateEnd, Date ebRelEventEmpDateDate, Integer ebRelEventEmpDateTrajetMinute, Integer ebRelEventEmpDateLunchMinutes, String ebRelEventEmpDateJobDesc, boolean ebRelEventEmpDateUserTimeValid, boolean ebRelEventEmpDateAdminTimeValid, boolean ebRelEventEmpDateFullDay) {
        this.employees = employees;
        this.ebEvents = ebEvents;
        this.ebRelEventEmpDateStart = ebRelEventEmpDateStart;
        this.ebRelEventEmpDateEnd = ebRelEventEmpDateEnd;
-       this.ebRelEventEmpDateTrajet = ebRelEventEmpDateTrajet;
-       this.ebRelEventEmpDateLunch = ebRelEventEmpDateLunch;
+       this.ebRelEventEmpDateDate = ebRelEventEmpDateDate;
+       this.ebRelEventEmpDateTrajetMinute = ebRelEventEmpDateTrajetMinute;
+       this.ebRelEventEmpDateLunchMinutes = ebRelEventEmpDateLunchMinutes;
        this.ebRelEventEmpDateJobDesc = ebRelEventEmpDateJobDesc;
        this.ebRelEventEmpDateUserTimeValid = ebRelEventEmpDateUserTimeValid;
        this.ebRelEventEmpDateAdminTimeValid = ebRelEventEmpDateAdminTimeValid;
+       this.ebRelEventEmpDateFullDay = ebRelEventEmpDateFullDay;
     }
    
     public Integer getIdebRelEventEmpDate() {
@@ -78,19 +85,26 @@ public class EbReleventempdate  implements java.io.Serializable {
     public void setEbRelEventEmpDateEnd(Date ebRelEventEmpDateEnd) {
         this.ebRelEventEmpDateEnd = ebRelEventEmpDateEnd;
     }
-    public Date getEbRelEventEmpDateTrajet() {
-        return this.ebRelEventEmpDateTrajet;
+    public Date getEbRelEventEmpDateDate() {
+        return this.ebRelEventEmpDateDate;
     }
     
-    public void setEbRelEventEmpDateTrajet(Date ebRelEventEmpDateTrajet) {
-        this.ebRelEventEmpDateTrajet = ebRelEventEmpDateTrajet;
+    public void setEbRelEventEmpDateDate(Date ebRelEventEmpDateDate) {
+        this.ebRelEventEmpDateDate = ebRelEventEmpDateDate;
     }
-    public Date getEbRelEventEmpDateLunch() {
-        return this.ebRelEventEmpDateLunch;
+    public Integer getEbRelEventEmpDateTrajetMinute() {
+        return this.ebRelEventEmpDateTrajetMinute;
     }
     
-    public void setEbRelEventEmpDateLunch(Date ebRelEventEmpDateLunch) {
-        this.ebRelEventEmpDateLunch = ebRelEventEmpDateLunch;
+    public void setEbRelEventEmpDateTrajetMinute(Integer ebRelEventEmpDateTrajetMinute) {
+        this.ebRelEventEmpDateTrajetMinute = ebRelEventEmpDateTrajetMinute;
+    }
+    public Integer getEbRelEventEmpDateLunchMinutes() {
+        return this.ebRelEventEmpDateLunchMinutes;
+    }
+    
+    public void setEbRelEventEmpDateLunchMinutes(Integer ebRelEventEmpDateLunchMinutes) {
+        this.ebRelEventEmpDateLunchMinutes = ebRelEventEmpDateLunchMinutes;
     }
     public String getEbRelEventEmpDateJobDesc() {
         return this.ebRelEventEmpDateJobDesc;
@@ -99,19 +113,26 @@ public class EbReleventempdate  implements java.io.Serializable {
     public void setEbRelEventEmpDateJobDesc(String ebRelEventEmpDateJobDesc) {
         this.ebRelEventEmpDateJobDesc = ebRelEventEmpDateJobDesc;
     }
-    public Boolean getEbRelEventEmpDateUserTimeValid() {
+    public boolean isEbRelEventEmpDateUserTimeValid() {
         return this.ebRelEventEmpDateUserTimeValid;
     }
     
-    public void setEbRelEventEmpDateUserTimeValid(Boolean ebRelEventEmpDateUserTimeValid) {
+    public void setEbRelEventEmpDateUserTimeValid(boolean ebRelEventEmpDateUserTimeValid) {
         this.ebRelEventEmpDateUserTimeValid = ebRelEventEmpDateUserTimeValid;
     }
-    public Boolean getEbRelEventEmpDateAdminTimeValid() {
+    public boolean isEbRelEventEmpDateAdminTimeValid() {
         return this.ebRelEventEmpDateAdminTimeValid;
     }
     
-    public void setEbRelEventEmpDateAdminTimeValid(Boolean ebRelEventEmpDateAdminTimeValid) {
+    public void setEbRelEventEmpDateAdminTimeValid(boolean ebRelEventEmpDateAdminTimeValid) {
         this.ebRelEventEmpDateAdminTimeValid = ebRelEventEmpDateAdminTimeValid;
+    }
+    public boolean isEbRelEventEmpDateFullDay() {
+        return this.ebRelEventEmpDateFullDay;
+    }
+    
+    public void setEbRelEventEmpDateFullDay(boolean ebRelEventEmpDateFullDay) {
+        this.ebRelEventEmpDateFullDay = ebRelEventEmpDateFullDay;
     }
 
 

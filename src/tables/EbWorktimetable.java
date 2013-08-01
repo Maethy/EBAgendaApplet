@@ -1,5 +1,5 @@
 package tables;
-// Generated 23 juil. 2013 18:33:26 by Hibernate Tools 3.2.1.GA
+// Generated 01-aout-2013 0:58:10 by Hibernate Tools 3.2.1.GA
 
 
 import java.util.Date;
@@ -11,34 +11,36 @@ public class EbWorktimetable  implements java.io.Serializable {
 
 
      private Integer idworkTimeTable;
-     private Employees employees;
+     private int ebWorkTimeTableEmp;
      private Date ebWorkTimeTableDate;
      private int ebWorkTimeTableNbHours;
      private boolean ebWorkTimeTableAdminValidation;
      private int ebWorkTimeTableNbMin;
      private boolean ebWorkTimeTableUserValidation;
      private Date ebWorkTimeTableWeekYear;
+     private String ebWorkTimeTableDesc;
 
     public EbWorktimetable() {
     }
 
 	
-    public EbWorktimetable(Employees employees, Date ebWorkTimeTableDate, int ebWorkTimeTableNbHours, boolean ebWorkTimeTableAdminValidation, int ebWorkTimeTableNbMin, boolean ebWorkTimeTableUserValidation) {
-        this.employees = employees;
+    public EbWorktimetable(int ebWorkTimeTableEmp, Date ebWorkTimeTableDate, int ebWorkTimeTableNbHours, boolean ebWorkTimeTableAdminValidation, int ebWorkTimeTableNbMin, boolean ebWorkTimeTableUserValidation) {
+        this.ebWorkTimeTableEmp = ebWorkTimeTableEmp;
         this.ebWorkTimeTableDate = ebWorkTimeTableDate;
         this.ebWorkTimeTableNbHours = ebWorkTimeTableNbHours;
         this.ebWorkTimeTableAdminValidation = ebWorkTimeTableAdminValidation;
         this.ebWorkTimeTableNbMin = ebWorkTimeTableNbMin;
         this.ebWorkTimeTableUserValidation = ebWorkTimeTableUserValidation;
     }
-    public EbWorktimetable(Employees employees, Date ebWorkTimeTableDate, int ebWorkTimeTableNbHours, boolean ebWorkTimeTableAdminValidation, int ebWorkTimeTableNbMin, boolean ebWorkTimeTableUserValidation, Date ebWorkTimeTableWeekYear) {
-       this.employees = employees;
+    public EbWorktimetable(int ebWorkTimeTableEmp, Date ebWorkTimeTableDate, int ebWorkTimeTableNbHours, boolean ebWorkTimeTableAdminValidation, int ebWorkTimeTableNbMin, boolean ebWorkTimeTableUserValidation, Date ebWorkTimeTableWeekYear, String ebWorkTimeTableDesc) {
+       this.ebWorkTimeTableEmp = ebWorkTimeTableEmp;
        this.ebWorkTimeTableDate = ebWorkTimeTableDate;
        this.ebWorkTimeTableNbHours = ebWorkTimeTableNbHours;
        this.ebWorkTimeTableAdminValidation = ebWorkTimeTableAdminValidation;
        this.ebWorkTimeTableNbMin = ebWorkTimeTableNbMin;
        this.ebWorkTimeTableUserValidation = ebWorkTimeTableUserValidation;
        this.ebWorkTimeTableWeekYear = ebWorkTimeTableWeekYear;
+       this.ebWorkTimeTableDesc = ebWorkTimeTableDesc;
     }
    
     public Integer getIdworkTimeTable() {
@@ -48,12 +50,12 @@ public class EbWorktimetable  implements java.io.Serializable {
     public void setIdworkTimeTable(Integer idworkTimeTable) {
         this.idworkTimeTable = idworkTimeTable;
     }
-    public Employees getEmployees() {
-        return this.employees;
+    public int getEbWorkTimeTableEmp() {
+        return this.ebWorkTimeTableEmp;
     }
     
-    public void setEmployees(Employees employees) {
-        this.employees = employees;
+    public void setEbWorkTimeTableEmp(int ebWorkTimeTableEmp) {
+        this.ebWorkTimeTableEmp = ebWorkTimeTableEmp;
     }
     public Date getEbWorkTimeTableDate() {
         return this.ebWorkTimeTableDate;
@@ -96,6 +98,13 @@ public class EbWorktimetable  implements java.io.Serializable {
     
     public void setEbWorkTimeTableWeekYear(Date ebWorkTimeTableWeekYear) {
         this.ebWorkTimeTableWeekYear = ebWorkTimeTableWeekYear;
+    }
+    public String getEbWorkTimeTableDesc() {
+        return this.ebWorkTimeTableDesc;
+    }
+    
+    public void setEbWorkTimeTableDesc(String ebWorkTimeTableDesc) {
+        this.ebWorkTimeTableDesc = ebWorkTimeTableDesc;
     }
 
 

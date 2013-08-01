@@ -1,9 +1,10 @@
 package tables;
-// Generated 23 juil. 2013 18:33:26 by Hibernate Tools 3.2.1.GA
+// Generated 31-juil.-2013 17:30:28 by Hibernate Tools 3.2.1.GA
 
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -19,7 +20,6 @@ public class EbEvents  implements java.io.Serializable {
      private Date ebEventsStartDate;
      private Date ebEventsEndDate;
      private int ebEventsIdCli;
-     private Set ebRelempevents = new HashSet(0);
      private Set ebReleventempdates = new HashSet(0);
 
     public EbEvents() {
@@ -30,14 +30,13 @@ public class EbEvents  implements java.io.Serializable {
         this.ebEventsStartDate = ebEventsStartDate;
         this.ebEventsIdCli = ebEventsIdCli;
     }
-    public EbEvents(Employees employees, String ebEventsName, String ebEventsDesc, Date ebEventsStartDate, Date ebEventsEndDate, int ebEventsIdCli, Set ebRelempevents, Set ebReleventempdates) {
+    public EbEvents(Employees employees, String ebEventsName, String ebEventsDesc, Date ebEventsStartDate, Date ebEventsEndDate, int ebEventsIdCli, Set ebReleventempdates) {
        this.employees = employees;
        this.ebEventsName = ebEventsName;
        this.ebEventsDesc = ebEventsDesc;
        this.ebEventsStartDate = ebEventsStartDate;
        this.ebEventsEndDate = ebEventsEndDate;
        this.ebEventsIdCli = ebEventsIdCli;
-       this.ebRelempevents = ebRelempevents;
        this.ebReleventempdates = ebReleventempdates;
     }
    
@@ -90,19 +89,49 @@ public class EbEvents  implements java.io.Serializable {
     public void setEbEventsIdCli(int ebEventsIdCli) {
         this.ebEventsIdCli = ebEventsIdCli;
     }
-    public Set getEbRelempevents() {
-        return this.ebRelempevents;
-    }
-    
-    public void setEbRelempevents(Set ebRelempevents) {
-        this.ebRelempevents = ebRelempevents;
-    }
     public Set getEbReleventempdates() {
         return this.ebReleventempdates;
     }
     
     public void setEbReleventempdates(Set ebReleventempdates) {
         this.ebReleventempdates = ebReleventempdates;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 17 * hash + Objects.hashCode(this.idebEvent);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final EbEvents other = (EbEvents) obj;
+        if (!Objects.equals(this.idebEvent, other.idebEvent)) {
+            return false;
+        }
+        if (!Objects.equals(this.employees, other.employees)) {
+            return false;
+        }
+        if (!Objects.equals(this.ebEventsDesc, other.ebEventsDesc)) {
+            return false;
+        }
+        if (!Objects.equals(this.ebEventsStartDate, other.ebEventsStartDate)) {
+            return false;
+        }
+        if (!Objects.equals(this.ebEventsEndDate, other.ebEventsEndDate)) {
+            return false;
+        }
+        if (this.ebEventsIdCli != other.ebEventsIdCli) {
+            return false;
+        }
+        return true;
     }
 
 

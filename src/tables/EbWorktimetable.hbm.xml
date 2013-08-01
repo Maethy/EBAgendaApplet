@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 23 juil. 2013 18:33:27 by Hibernate Tools 3.2.1.GA -->
+<!-- Generated 01-ao?t-2013 0:58:10 by Hibernate Tools 3.2.1.GA -->
 <hibernate-mapping>
-    <class name="tables.EbWorktimetable" table="eb_worktimetable" catalog="eb">
+    <class name="tables.EbWorktimetable" table="eb_worktimetable" catalog="ebjava">
         <id name="idworkTimeTable" type="java.lang.Integer">
             <column name="idworkTimeTable" />
             <generator class="identity" />
         </id>
-        <many-to-one name="employees" class="tables.Employees" fetch="select">
+        <property name="ebWorkTimeTableEmp" type="int">
             <column name="eb_workTimeTableEmp" not-null="true" />
-        </many-to-one>
+        </property>
         <property name="ebWorkTimeTableDate" type="date">
             <column name="eb_workTimeTableDate" length="10" not-null="true" />
         </property>
@@ -28,6 +28,9 @@
         </property>
         <property name="ebWorkTimeTableWeekYear" type="date">
             <column name="eb_workTimeTableWeekYear" length="10" />
+        </property>
+        <property name="ebWorkTimeTableDesc" type="string">
+            <column name="eb_workTimeTableDesc" length="65535" />
         </property>
     </class>
 </hibernate-mapping>

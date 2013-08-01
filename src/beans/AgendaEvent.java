@@ -4,16 +4,20 @@
  */
 package beans;
 
+import business.EventUtil;
+import java.awt.BorderLayout;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DragSource;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
 import java.util.Calendar;
-import java.util.Locale;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.WindowConstants;
+import tables.EbReleventempdate;
 
 /**
  *
@@ -25,9 +29,10 @@ public class AgendaEvent extends JButton{
     private String summary;
     private String description;
     private JLabel title;
+    private JCheckBox userValid, adminValid;
     private Calendar start, end;
     private int id;
-    
+    private EbReleventempdate eventDate; 
     private boolean isWholeDayEvent;
 
     public AgendaEvent(){
@@ -66,7 +71,8 @@ public class AgendaEvent extends JButton{
             }
         });
     }
-     public AgendaEvent(AgendaDay parent, String summary, int id, Calendar start, Calendar end) {
+     public AgendaEvent(AgendaDay parent, String summary, int id, 
+             Calendar start, Calendar end, boolean isFullDay) {
         this.summary = summary;
         this.parentDay = parent;
         this.dateOfEvent = parent.getDateOfDay();
@@ -75,39 +81,59 @@ public class AgendaEvent extends JButton{
         this.end = Calendar.getInstance();
         this.start.setTime(start.getTime());
         this.end.setTime(end.getTime());
+        this.userValid = new JCheckBox("Valider Temps");
+        this.adminValid = new JCheckBox("Verrouiller Temps");
+        this.userValid.setContentAreaFilled(false);
+        this.isWholeDayEvent = isFullDay;
+        eventDate = EventUtil.getEventUser(this.id);
+        this.setOpaque(false);
+        this.setLayout(new BorderLayout());
 //        System.out.println("hash from parentday "+this.parentDay.hashCode()+" / "+parent.hashCode());
-        title = new JLabel("<html><body>"
+        String bold, unbold;
+        if(this.isWholeDayEvent){
+            bold = "<b>";
+            unbold = "</b>";
+        }else{
+            bold ="";
+            unbold="";
+        }
+        title = new JLabel("<html><body>"+bold+
                 +this.dateOfEvent.get(Calendar.DAY_OF_MONTH)
                 +" "+this.summary+"<br>from "
                 +this.start.get(Calendar.HOUR_OF_DAY)+":"+this.start.get(Calendar.MINUTE)
                 +"<br> to "+this.end.get(Calendar.HOUR_OF_DAY)+":"
-                +this.end.get(Calendar.MINUTE)+"</body></html>");
+                +this.end.get(Calendar.MINUTE)+unbold+"</body></html>");
         this.setContentAreaFilled(false);
+        this.setOpaque(true);
         setBackground(parentDay.getBackground());
-        add(title);
+        add(title, BorderLayout.CENTER);
+//        add(userValid, BorderLayout.PAGE_END);
         
-        DragSource ds = new DragSource();
-//        this.setTransferHandler(new AgendaEventTransferHandler());
-        ds.createDefaultDragGestureRecognizer(this, DnDConstants.ACTION_MOVE, new DragGestureListImp());
-        
-//        this.addMouseListener(new MouseAdapter(){
-          
-//      public void mousePressed(MouseEvent e){
-//        AgendaEvent ae = (AgendaEvent)e.getSource();
-//        TransferHandler handle = ae.getTransferHandler();
-//        handle.exportAsDrag(ae, e, TransferHandler.COPY);
-//      }
-//    });
         this.addActionListener(new ActionListener(){
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(AgendaEvent.this, AgendaEvent.this.summary+" "+AgendaEvent.this.id);
+                displayEventDetail();            
             }
         });
+        
+        this.setToolTipText(eventDate.getEbRelEventEmpDateJobDesc());
     }
     
+     private void displayEventDetail(){
+         JFrame eventFrame;
+         AgendaModEventDay modEventPanel;
+         eventFrame = new JFrame("Détail évènement");
+         eventFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+         modEventPanel = new AgendaModEventDay(eventFrame, eventDate);
+         eventFrame.add(modEventPanel);
+         eventFrame.pack();
+         eventFrame.setVisible(true);
+         
+     }
+     
     public AgendaEvent(AgendaEvent a){
+        
         this.dateOfEvent = Calendar.getInstance();
         this.dateOfEvent.setTimeInMillis(a.dateOfEvent.getTimeInMillis());
         
@@ -122,6 +148,7 @@ public class AgendaEvent extends JButton{
         this.parentDay = a.parentDay;
         this.summary = String.copyValueOf(a.summary.toCharArray());
         this.title = new JLabel(a.title.getText());
+        this.eventDate = a.eventDate;
         this.setContentAreaFilled(false);
         setBackground(parentDay.getBackground());
         add(title);
@@ -130,9 +157,10 @@ public class AgendaEvent extends JButton{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(AgendaEvent.this, AgendaEvent.this.summary+" "+AgendaEvent.this.id);
+                AgendaEvent.this.displayEventDetail();
             }
         });
+       this.setToolTipText(eventDate.getEbRelEventEmpDateJobDesc());
 
         
     }
@@ -167,6 +195,11 @@ public class AgendaEvent extends JButton{
         this.end = end;
     }
 
+    public boolean isIsWholeDayEvent() {
+        return isWholeDayEvent;
+    }
+
+    
     
     
     @Override

@@ -4,7 +4,11 @@
  */
 package beans;
 
+import java.awt.event.FocusEvent;
+import java.util.Calendar;
 import javax.swing.JComboBox;
+import javax.swing.plaf.basic.BasicComboBoxEditor;
+
 
 /**
  *
@@ -31,6 +35,7 @@ public class TimeComboBox extends JComboBox {
         setEditable(true);
         setMaximumRowCount(7);
         setModel(new javax.swing.DefaultComboBoxModel(newModel()));
+        setEditor(new MyBasicEditor());
         setMinimumSize(new java.awt.Dimension(80, 22));
         setPreferredSize(new java.awt.Dimension(80, 22));
     }// </editor-fold>//GEN-END:initComponents
@@ -44,7 +49,58 @@ public class TimeComboBox extends JComboBox {
            thmArray[i+1]=thm2;
        }
        return thmArray;
-}
+    }
+    
+    
+    
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void setSelectedItem(Object o) {
+        if(o instanceof java.util.Date){
+            java.util.Date date = (java.util.Date) o;
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            TimeHourMinute thm = new TimeHourMinute
+                    ((cal.get(Calendar.HOUR_OF_DAY)),cal.get(Calendar.MINUTE));
+            super.setSelectedItem(thm);
+        }
+        super.setSelectedItem(o); //To change body of generated methods, choose Tools | Templates.
+    }
+
+}
+class MyBasicEditor extends BasicComboBoxEditor{
+    Object newValue;
+    Object oldValue;
+    
+    @Override
+    public void setItem(Object o) {        
+        
+        if(o instanceof String){
+            TimeHourMinute thm = new TimeHourMinute();
+            try{
+                String str = (String) o;
+                String [] strTab;
+                strTab = str.split(":");
+                thm.setHour(Integer.parseInt(strTab[0]));
+                thm.setMinute(Integer.parseInt(strTab[1]));
+                super.setItem(thm);
+            }catch(Exception e){
+                System.err.println("Problème de casting d'heure");
+            }
+        }else{
+            super.setItem(o);
+        }
+    }
+
+    @Override
+    public void focusLost(FocusEvent fe) {
+        super.focusLost(fe); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 }

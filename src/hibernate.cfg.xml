@@ -4,13 +4,12 @@
   <session-factory>
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-    <property name="hibernate.connection.url">jdbc:mysql://JSMAYA-PC:3306/eb?zeroDateTimeBehavior=convertToNull</property>
-    <property name="hibernate.connection.username">admin</property>
-    <property name="hibernate.connection.password">system</property>
+    <property name="hibernate.connection.url">jdbc:mysql://ns303093.ovh.net:3306/ebjava?zeroDateTimeBehavior=convertToNull</property>
+    <property name="hibernate.connection.username">usr_eb</property>
+    <property name="hibernate.connection.password">gYsiI9TW0</property>
     <property name="hibernate.show_sql">false</property>
     <property name="hibernate.query.factory_class">org.hibernate.hql.classic.ClassicQueryTranslatorFactory</property>
     <mapping resource="tables/EbCity.hbm.xml"/>
-    <mapping resource="tables/EbRelempevent.hbm.xml"/>
     <mapping resource="tables/Typeclient.hbm.xml"/>
     <mapping resource="tables/EbCountry.hbm.xml"/>
     <mapping resource="tables/EbReleventempdate.hbm.xml"/>

@@ -8,12 +8,17 @@ import beans.AgendaPanel;
 import beans.AgendaUser;
 import business.EventUtil;
 import com.toedter.calendar.JCalendar;
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
 import tables.Employees;
 
@@ -29,6 +34,7 @@ public class TestApplet extends javax.swing.JApplet {
     private List <AgendaUser> userList;
     public static List<Employees> empList;
     public static HashMap <String, Employees> empMap;
+    private ImageIcon image;
     /**
      * Initializes the applet TestApplet
      */
@@ -38,12 +44,6 @@ public class TestApplet extends javax.swing.JApplet {
                 getMaximumWindowBounds().width-16, java.awt.GraphicsEnvironment.
                         getLocalGraphicsEnvironment().getMaximumWindowBounds().
                         height-64);
-//        Calendar test = Calendar.getInstance();
-//        test.set(2012, 12, 25);
-//        for(int i =0; i<1000; i++){
-//            test.add(Calendar.DAY_OF_MONTH, 1);
-//            System.out.println(test.get(Calendar.DAY_OF_YEAR));
-//        }
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -73,7 +73,9 @@ public class TestApplet extends javax.swing.JApplet {
                 public void run() {
                     initComponents();
                     EventUtil.settApp(TestApplet.this);
-                    initAgenda();
+                    EventUtil.openSession();
+                    PopulateUsers();
+                    reload();
                 }
             });
         } catch (Exception ex) {
@@ -82,42 +84,129 @@ public class TestApplet extends javax.swing.JApplet {
 
     }
 
-    public void reload(){
-        initAgenda();
-    }
+//    @Override
+//    protected void finalize() throws Throwable {
+//        EventUtil.closeSession();
+//        super.finalize(); 
+//    }
+
     
+    
+    public void reload(){
+        
+        final Calendar startTimeElapsed = Calendar.getInstance();        
+        SwingWorker worker = new SwingWorker<Object, Void>() {
+            
+            JFrame loadFrame;
+            
+                @Override
+                public Object doInBackground() {
+                  
+                   image = new ImageIcon("./resources/468.gif");
+                   loadFrame = new JFrame("Chargement...");
+                   loadFrame.setLayout(new BorderLayout());
+                   JLabel lbLoad = new JLabel("Chargement...");
+                   JLabel lbLoadImg = new JLabel();
+                   lbLoadImg.setIcon(image);
+                   loadFrame.add(lbLoad, BorderLayout.PAGE_END);
+                   loadFrame.add(lbLoadImg, BorderLayout.CENTER);
+                   loadFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                   loadFrame.setBounds(TestApplet.this.getBounds().x+(TestApplet.this.getBounds().width/2)-35, 
+                           TestApplet.this.getBounds().y+(TestApplet.this.getBounds().height/2)-35,10,10);
+                   loadFrame.pack();
+                   loadFrame.setAlwaysOnTop(true);
+                   loadFrame.setVisible(true);
+                   loadFrame.revalidate();
+                   TestApplet.this.setEnabled(false);
+//                   loadFrame.pack();
+                   return new Object();
+                }
+
+                @Override
+                public void done() {
+                    try {
+                        Object object = get();
+                        initAgenda();
+                        loadFrame.dispose();
+                        TestApplet.this.setEnabled(true);
+                        Calendar timeElapsed = Calendar.getInstance();
+                        long millisec =  timeElapsed.getTimeInMillis()- startTimeElapsed.getTimeInMillis();
+                        lbDates.setText("Dates - généré en "+millisec+" ms");
+                    }catch (InterruptedException ignore) {
+                    }catch (java.util.concurrent.ExecutionException e) {
+                        String why = null;
+                        Throwable cause = e.getCause();
+                        if (cause != null) {
+                            why = cause.getMessage();
+                        } else {
+                            why = e.getMessage();
+                        }
+                        System.err.println("initagenda swingworker: " + 
+                                e.getCause());
+                        TestApplet.this.setEnabled(true);
+                    }catch(Exception e){
+                        System.err.println("initagenda swingworker exception "
+                                +e.getClass()+" "+ e.getMessage()+" ");
+                        for (StackTraceElement ste : e.getStackTrace()) {
+                            System.out.println(ste);
+                        }
+                        TestApplet.this.setEnabled(true);
+                    }
+                }
+            };
+        worker.execute();
+    }
+   
     private void initAgenda(){
-//        if(agenda!=null)this.contentPanel.remove(agenda);
-        Calendar startTimeElapsed = Calendar.getInstance();
+        EventUtil.openSession();
         startCalendar = startDateChooser.getCalendar();
         endCalendar = endDateChooser.getCalendar();
         if(startCalendar == null){
             startCalendar = Calendar.getInstance();
+
             startCalendar.add(Calendar.WEEK_OF_YEAR,-3);
         }
+        startDateChooser.setCalendar(startCalendar);
+        
         if(endCalendar == null){
             endCalendar = Calendar.getInstance();
             endCalendar.add(Calendar.WEEK_OF_YEAR, 4);
         }
-        if(empMap == null){
-            empMap = new  HashMap();
-        }
+        endDateChooser.setCalendar(endCalendar);
+        
         if(userList == null){
             userList = new ArrayList();
-            EventUtil.openSession();
-            PopulateUsers();
+//                            EventUtil.openSession();
         }
         checkUsers();
-        agenda = new AgendaPanel(startCalendar, endCalendar, this.userList);
+        int scrollProRata = endCalendar.get(Calendar.WEEK_OF_YEAR)-
+                startCalendar.get(Calendar.WEEK_OF_YEAR);
+        int scrollPos = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)
+                -startCalendar.get(Calendar.WEEK_OF_YEAR);
+        int scrollValue;
+        
+        if(agenda==null){
+            agenda = new AgendaPanel(startCalendar, endCalendar, userList);
+        }else{
+            agenda.ReloadAgendaPanel(startCalendar, endCalendar);
+        }
         contentScrollPane.setViewportView(agenda);
-//        System.out.println(startCalendar.get(Calendar.WEEK_OF_YEAR));
-        this.revalidate();
-        Calendar timeElapsed = Calendar.getInstance();
-        long millisec =  timeElapsed.getTimeInMillis()-startTimeElapsed.getTimeInMillis();
-        lbDates.setText("Dates - généré en "+millisec+" ms");
+        //Trying to set view on current week
+        scrollValue = 
+                ((contentScrollPane.getVerticalScrollBar().getMaximum())/scrollProRata)*scrollPos-
+                ((userList.size()*56)+8);
+        contentScrollPane.getVerticalScrollBar().setValue(scrollValue);
+        TestApplet.this.revalidate();
+        
+         
+//        if(agenda!=null)this.contentPanel.remove(agenda);
+        
     }
     
     private void PopulateUsers(){
+         if(empMap == null){
+            empMap = new  HashMap();
+        }
         empList = EventUtil.getEmployeeList();
         
         for(Employees emp : empList){
@@ -126,10 +215,15 @@ public class TestApplet extends javax.swing.JApplet {
             userPanel.add(ckb);
             empMap.put(emp.getInitiales(), emp);
         }
+        this.revalidate();
     }
     
     private void checkUsers(){
-        userList = new ArrayList();
+        if(userList==null){
+            userList = new ArrayList();
+        }else{
+            userList.clear();
+        }
         for(Object o : userPanel.getComponents()){
             if(o instanceof JCheckBox){
                 JCheckBox ckb = (JCheckBox)o;
@@ -184,7 +278,6 @@ public class TestApplet extends javax.swing.JApplet {
         userBtPanel = new javax.swing.JPanel();
         btAllUser = new javax.swing.JButton();
         btNoUser = new javax.swing.JButton();
-        lbUsers = new javax.swing.JLabel();
         contentPanel = new javax.swing.JPanel();
         contentScrollPane = new javax.swing.JScrollPane();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -216,12 +309,13 @@ public class TestApplet extends javax.swing.JApplet {
         topPanel.setLayout(new java.awt.GridBagLayout());
 
         lbDates.setText("Dates");
+        lbDates.setOpaque(true);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         topPanel.add(lbDates, gridBagConstraints);
 
-        btBuild.setText("Build");
+        btBuild.setText("Charger");
         btBuild.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btBuildActionPerformed(evt);
@@ -234,9 +328,10 @@ public class TestApplet extends javax.swing.JApplet {
         gridBagConstraints.weightx = 1.0;
         topPanel.add(btBuild, gridBagConstraints);
 
-        datePanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        datePanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Dates"));
+        datePanel.setLayout(new javax.swing.BoxLayout(datePanel, javax.swing.BoxLayout.LINE_AXIS));
 
-        btCurWeek.setText("Current Week");
+        btCurWeek.setText("Cette semaine");
         btCurWeek.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btCurWeekActionPerformed(evt);
@@ -266,12 +361,14 @@ public class TestApplet extends javax.swing.JApplet {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
         topPanel.add(datePanel, gridBagConstraints);
 
-        userPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        userPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder("Users"), "Utilisateurs"));
+        userPanel.setLayout(new javax.swing.BoxLayout(userPanel, javax.swing.BoxLayout.LINE_AXIS));
 
-        btAllUser.setText("All");
+        btAllUser.setText("Tous");
         btAllUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btAllUserActionPerformed(evt);
@@ -279,7 +376,7 @@ public class TestApplet extends javax.swing.JApplet {
         });
         userBtPanel.add(btAllUser);
 
-        btNoUser.setText("None");
+        btNoUser.setText("Aucun");
         btNoUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btNoUserActionPerformed(evt);
@@ -291,11 +388,9 @@ public class TestApplet extends javax.swing.JApplet {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
         gridBagConstraints.weightx = 1.0;
         topPanel.add(userPanel, gridBagConstraints);
-
-        lbUsers.setText("Users");
-        topPanel.add(lbUsers, new java.awt.GridBagConstraints());
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -304,6 +399,7 @@ public class TestApplet extends javax.swing.JApplet {
         gridBagConstraints.weightx = 1.0;
         getContentPane().add(topPanel, gridBagConstraints);
 
+        contentPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Agenda"));
         contentPanel.setLayout(new java.awt.GridLayout(1, 7));
         contentPanel.add(contentScrollPane);
 
@@ -333,7 +429,7 @@ public class TestApplet extends javax.swing.JApplet {
     
     
     private void btBuildActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBuildActionPerformed
-        initAgenda();
+        reload();
     }//GEN-LAST:event_btBuildActionPerformed
 
     private void btJCalEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btJCalEndActionPerformed
@@ -380,9 +476,9 @@ public class TestApplet extends javax.swing.JApplet {
     }//GEN-LAST:event_btResetWeekActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        TablesUI ui = new TablesUI();
-        ui.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        ui.setVisible(true);
+//        TablesUI ui = new TablesUI();
+//        ui.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+//        ui.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -406,7 +502,6 @@ public class TestApplet extends javax.swing.JApplet {
     private javax.swing.JLabel lbDates;
     private javax.swing.JLabel lbEndDate;
     private javax.swing.JLabel lbStartDate;
-    private javax.swing.JLabel lbUsers;
     private com.toedter.calendar.JDateChooser startDateChooser;
     private javax.swing.JPanel startDatePanel;
     private javax.swing.JPanel topPanel;

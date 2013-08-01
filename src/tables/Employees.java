@@ -1,5 +1,5 @@
 package tables;
-// Generated 23 juil. 2013 18:33:26 by Hibernate Tools 3.2.1.GA
+// Generated 31-juil.-2013 17:30:28 by Hibernate Tools 3.2.1.GA
 
 
 import java.util.HashSet;
@@ -26,7 +26,6 @@ public class Employees  implements java.io.Serializable {
      private Set ebReleventempdates = new HashSet(0);
      private Set ebEventses = new HashSet(0);
      private Set ebWorktimetables = new HashSet(0);
-     private Set ebRelempevents = new HashSet(0);
 
     public Employees() {
     }
@@ -40,7 +39,7 @@ public class Employees  implements java.io.Serializable {
         this.pass = pass;
         this.disableEmpl = disableEmpl;
     }
-    public Employees(int idEmpl, String fullName, String initiales, String fonction, String telephone, String mail, String mail2, String skype, String login, String pass, boolean disableEmpl, Set ebReleventempdates, Set ebEventses, Set ebWorktimetables, Set ebRelempevents) {
+    public Employees(int idEmpl, String fullName, String initiales, String fonction, String telephone, String mail, String mail2, String skype, String login, String pass, boolean disableEmpl, Set ebReleventempdates, Set ebEventses, Set ebWorktimetables) {
        this.idEmpl = idEmpl;
        this.fullName = fullName;
        this.initiales = initiales;
@@ -55,7 +54,6 @@ public class Employees  implements java.io.Serializable {
        this.ebReleventempdates = ebReleventempdates;
        this.ebEventses = ebEventses;
        this.ebWorktimetables = ebWorktimetables;
-       this.ebRelempevents = ebRelempevents;
     }
    
     public Integer getId() {
@@ -162,13 +160,6 @@ public class Employees  implements java.io.Serializable {
     
     public void setEbWorktimetables(Set ebWorktimetables) {
         this.ebWorktimetables = ebWorktimetables;
-    }
-    public Set getEbRelempevents() {
-        return this.ebRelempevents;
-    }
-    
-    public void setEbRelempevents(Set ebRelempevents) {
-        this.ebRelempevents = ebRelempevents;
     }
 
 

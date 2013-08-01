@@ -1,37 +1,4 @@
-/*
- * To change this template, choose
-            @Override
-            public void setSelectedItem(Object o) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
 
-            @Override
-            public Object getSelectedItem() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public int getSize() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public E getElementAt(int i) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void addListDataListener(ListDataListener ll) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void removeListDataListener(ListDataListener ll) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-        }Tools | Templates
- * and open the template in the editor.
- */
 package beans;
 
 import business.EventUtil;
@@ -39,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import javax.swing.JCheckBox;
+import javax.swing.JFrame;
 import tables.EbCli;
 import tables.Employees;
 import ui.TestApplet;
@@ -51,20 +19,23 @@ public class AgendaNewEvent extends javax.swing.JPanel {
     
     private List<JCheckBox> userCheckBoxes;
     private List<EbCli> cliList;
+    private JFrame parent;
+    private Calendar start, end;
     
     /**
      * Creates new form AgendaNewEventPanel
      */
-    public AgendaNewEvent(Calendar date) {
+    public AgendaNewEvent(Calendar date, JFrame parent) {
         userCheckBoxes = new ArrayList();
         initComponents();        
-        Calendar start, end;
+        
+        this.parent = parent;
         start = Calendar.getInstance();
         end = Calendar.getInstance();
         start.setTimeInMillis(date.getTimeInMillis());
         end.setTimeInMillis(date.getTimeInMillis());
 //        start.set(Calendar.HOUR_OF_DAY, 9);
-        end.set(Calendar.HOUR_OF_DAY, 17);
+        end.set(Calendar.HOUR_OF_DAY, start.get(Calendar.HOUR_OF_DAY)+1);
         this.startTimeBean.setDateTime(start);
         this.endTimeBean.setDateTime(end);
         populateUsers();
@@ -136,22 +107,23 @@ public class AgendaNewEvent extends javax.swing.JPanel {
 
         title = new javax.swing.JLabel();
         contentPanel = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        titlePanel = new javax.swing.JPanel();
         fieldEventName = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
+        ckBoxFullDay = new javax.swing.JCheckBox();
+        startDatePanel = new javax.swing.JPanel();
         startTimeBean = new beans.DateTimeBean();
-        jLabel3 = new javax.swing.JLabel();
+        endDatePanel = new javax.swing.JPanel();
         endTimeBean = new beans.DateTimeBean();
-        jLabel5 = new javax.swing.JLabel();
+        usersPanel = new javax.swing.JPanel();
         userPanel = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        cliPanel = new javax.swing.JPanel();
+        jComboBox1 = new javax.swing.JComboBox();
+        descPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtEventDesc = new javax.swing.JTextArea();
-        jComboBox1 = new javax.swing.JComboBox();
-        buttonPanel = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btPanel = new javax.swing.JPanel();
+        btCreateEvent = new javax.swing.JButton();
+        btCancel = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -160,123 +132,161 @@ public class AgendaNewEvent extends javax.swing.JPanel {
 
         contentPanel.setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText("Titre");
+        titlePanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Titre"));
+        titlePanel.setLayout(new javax.swing.BoxLayout(titlePanel, javax.swing.BoxLayout.LINE_AXIS));
+        titlePanel.add(fieldEventName);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        contentPanel.add(jLabel1, gridBagConstraints);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 1;
+        gridBagConstraints.weightx = 1.0;
+        contentPanel.add(titlePanel, gridBagConstraints);
 
-        fieldEventName.setText("jTextField1");
+        ckBoxFullDay.setText("Journée Entière");
+        ckBoxFullDay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ckBoxFullDayActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 0;
+        contentPanel.add(ckBoxFullDay, gridBagConstraints);
+
+        startDatePanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Début"));
+        startDatePanel.setLayout(new javax.swing.BoxLayout(startDatePanel, javax.swing.BoxLayout.LINE_AXIS));
+        startDatePanel.add(startTimeBean);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 1;
+        gridBagConstraints.weightx = 1.0;
+        contentPanel.add(startDatePanel, gridBagConstraints);
+
+        endDatePanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Fin"));
+        endDatePanel.setLayout(new javax.swing.BoxLayout(endDatePanel, javax.swing.BoxLayout.LINE_AXIS));
+        endDatePanel.add(endTimeBean);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        contentPanel.add(fieldEventName, gridBagConstraints);
+        contentPanel.add(endDatePanel, gridBagConstraints);
 
-        jLabel2.setText("De");
+        usersPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Participants"));
+        usersPanel.setLayout(new javax.swing.BoxLayout(usersPanel, javax.swing.BoxLayout.LINE_AXIS));
+
+        userPanel.setLayout(new java.awt.GridLayout(0, 6));
+        usersPanel.add(userPanel);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
-        contentPanel.add(jLabel2, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        contentPanel.add(startTimeBean, gridBagConstraints);
+        contentPanel.add(usersPanel, gridBagConstraints);
 
-        jLabel3.setText("à");
+        cliPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Client"));
+        cliPanel.setLayout(new javax.swing.BoxLayout(cliPanel, javax.swing.BoxLayout.LINE_AXIS));
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(populateClients()));
+        cliPanel.add(jComboBox1);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 2);
-        contentPanel.add(jLabel3, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        contentPanel.add(endTimeBean, gridBagConstraints);
+        contentPanel.add(cliPanel, gridBagConstraints);
 
-        jLabel5.setText("Participants");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 3;
-        contentPanel.add(jLabel5, gridBagConstraints);
-
-        userPanel.setLayout(new java.awt.GridLayout(0, 8));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 3;
-        contentPanel.add(userPanel, gridBagConstraints);
-
-        jLabel6.setText("Client");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.weightx = 1.0;
-        contentPanel.add(jLabel6, gridBagConstraints);
-
-        jLabel4.setText("Description");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 4;
-        contentPanel.add(jLabel4, gridBagConstraints);
+        descPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Description"));
+        descPanel.setLayout(new javax.swing.BoxLayout(descPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         txtEventDesc.setColumns(20);
         txtEventDesc.setRows(5);
         jScrollPane1.setViewportView(txtEventDesc);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 4;
-        contentPanel.add(jScrollPane1, gridBagConstraints);
+        descPanel.add(jScrollPane1);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(populateClients()));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 2;
-        contentPanel.add(jComboBox1, gridBagConstraints);
-
-        add(contentPanel, java.awt.BorderLayout.CENTER);
-
-        buttonPanel.setLayout(new java.awt.GridBagLayout());
-
-        jButton1.setText("Créer");
-        jButton1.setMaximumSize(new java.awt.Dimension(69, 23));
-        jButton1.setMinimumSize(new java.awt.Dimension(69, 23));
-        jButton1.setPreferredSize(new java.awt.Dimension(69, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        buttonPanel.add(jButton1, gridBagConstraints);
+        contentPanel.add(descPanel, gridBagConstraints);
 
-        jButton2.setText("Annuler");
+        btPanel.setLayout(new java.awt.GridBagLayout());
+
+        btCreateEvent.setText("Créer");
+        btCreateEvent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCreateEventActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        buttonPanel.add(jButton2, gridBagConstraints);
+        btPanel.add(btCreateEvent, gridBagConstraints);
 
-        add(buttonPanel, java.awt.BorderLayout.PAGE_END);
+        btCancel.setText("Annuler");
+        btCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCancelActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.weightx = 1.0;
+        btPanel.add(btCancel, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        contentPanel.add(btPanel, gridBagConstraints);
+
+        add(contentPanel, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void ckBoxFullDayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckBoxFullDayActionPerformed
+        
+        start.set(Calendar.HOUR_OF_DAY, 9);
+        end.set(Calendar.HOUR_OF_DAY, 17);
+        this.startTimeBean.setDateTime(start);
+        this.endTimeBean.setDateTime(end);
+        this.startTimeBean.setEnabled(!ckBoxFullDay.isSelected());
+        this.endTimeBean.setEnabled(!ckBoxFullDay.isSelected());
+        
+    }//GEN-LAST:event_ckBoxFullDayActionPerformed
+
+    private void btCreateEventActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCreateEventActionPerformed
+        EventUtil.addEvent(this.getEventName(), this.getEventDesc(), //On crée le nouvel évènement, et on le récupère dans la liste
+                this.getStartTime(), this.getEndTime(), 
+                this.getClient().getIdebCli(), this.getEmployees(), 
+                this.ckBoxFullDay.isSelected());
+        EventUtil.gettApp().reload();
+        this.parent.dispose();
+    }//GEN-LAST:event_btCreateEventActionPerformed
+
+    private void btCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelActionPerformed
+        this.parent.dispose();
+    }//GEN-LAST:event_btCancelActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel buttonPanel;
+    private javax.swing.JButton btCancel;
+    private javax.swing.JButton btCreateEvent;
+    private javax.swing.JPanel btPanel;
+    private javax.swing.JCheckBox ckBoxFullDay;
+    private javax.swing.JPanel cliPanel;
     private javax.swing.JPanel contentPanel;
+    private javax.swing.JPanel descPanel;
+    private javax.swing.JPanel endDatePanel;
     private beans.DateTimeBean endTimeBean;
     private javax.swing.JTextField fieldEventName;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel startDatePanel;
     private beans.DateTimeBean startTimeBean;
     private javax.swing.JLabel title;
+    private javax.swing.JPanel titlePanel;
     private javax.swing.JTextArea txtEventDesc;
     private javax.swing.JPanel userPanel;
+    private javax.swing.JPanel usersPanel;
     // End of variables declaration//GEN-END:variables
 }

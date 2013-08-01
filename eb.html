@@ -1,0 +1,13 @@
+<script language="javascript">
+var w = window,
+    d = document,
+    e = d.documentElement,
+    g = d.getElementsByTagName('body')[0],
+    x = (e.clientWidth || g.clientWidth)-10,
+    y = (e.clientHeight|| g.clientHeight)-35;
+<!-- document.write(window.screen.availWidth+" "+window.screen.availHeight+" "+x+" "+y); -->
+document.write("<html><head><title></title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"></head>");
+document.write("<body  onLoad=\"setSize()\">");
+document.write("<div><applet code=\"ui.TestApplet\" archive=\"EBAgendaApplet.jar\" width="+x+" height="+y+"></applet>");
+document.write("</div></body></html>");
+</script>

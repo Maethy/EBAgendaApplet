@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 23 juil. 2013 18:33:27 by Hibernate Tools 3.2.1.GA -->
+<!-- Generated 31-juil.-2013 17:30:28 by Hibernate Tools 3.2.1.GA -->
 <hibernate-mapping>
-    <class name="tables.EbCli" table="eb_cli" catalog="eb">
+    <class name="tables.EbCli" table="eb_cli" catalog="ebjava">
         <id name="idebCli" type="java.lang.Integer">
             <column name="ideb_cli" />
             <generator class="identity" />

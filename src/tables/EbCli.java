@@ -1,5 +1,5 @@
 package tables;
-// Generated 23 juil. 2013 18:33:26 by Hibernate Tools 3.2.1.GA
+// Generated 31-juil.-2013 17:30:28 by Hibernate Tools 3.2.1.GA
 
 
 

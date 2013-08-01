@@ -106,7 +106,6 @@ public class DateTimeBean extends JPanel {
             calendar.set(Calendar.MINUTE, thm.getMinute());
             calendar.set(Calendar.SECOND, 0);
             this.setDateTime(calendar);
-            System.out.println(this.dateTime.getTime());
         }
     }
     private void jDateChooser1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jDateChooser1PropertyChange
@@ -114,10 +113,18 @@ public class DateTimeBean extends JPanel {
     }//GEN-LAST:event_jDateChooser1PropertyChange
 
     private void timeComboBox2PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_timeComboBox2PropertyChange
-        System.out.println(((TimeHourMinute)this.timeComboBox2.getSelectedItem()).toString());
         mergeDateTime();
     }//GEN-LAST:event_timeComboBox2PropertyChange
 
+    @Override
+    public void setEnabled(boolean bool){
+        this.jDateChooser1.setEnabled(bool);
+        this.timeComboBox2.setEnabled(bool);
+    }
+    
+    public void setDateEnabled(boolean bool){
+        this.jDateChooser1.setEnabled(bool);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private beans.TimeComboBox timeComboBox2;
